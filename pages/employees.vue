@@ -13,7 +13,7 @@
           />
         </v-col>
         <v-btn color="primary" dark class="mb-2" @click="createItem()">
-          Add Merchant
+          Add Employee
         </v-btn>
       </v-row>
     </v-col>
@@ -74,8 +74,8 @@
                 <v-col cols="12" md="6" v-if="!createMode">
                   <v-text-field
                     :disabled="viewMode || editMode"
-                    v-model="editedItem._id"
-                    label="Merchant Id"
+                    v-model="editedItem.employeeId"
+                    label="Employee Id"
                   >
                   </v-text-field>
                 </v-col>
