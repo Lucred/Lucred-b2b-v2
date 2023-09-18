@@ -311,6 +311,7 @@ const DashboardAddProduct = () => {
               {employeeId ? (
                 <button
                   type="submit"
+                  disabled
                   className="bg-[#533AE9] w-[40%] h-[5vh] text-[#fff] mr-[5%] rounded-md flex justify-center items-center"
                 >
                   Update Employee
@@ -318,6 +319,7 @@ const DashboardAddProduct = () => {
               ) : (
                 <button
                   type="submit"
+                  disabled
                   className="bg-[#533AE9] w-[50%] h-[5vh] text-[#fff] mr-[5%] rounded-md flex justify-center items-center t"
                 >
                   Add Employee
