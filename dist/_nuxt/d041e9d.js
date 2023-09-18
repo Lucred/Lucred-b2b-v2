@@ -1,1 +1,0 @@
-(window.webpackJsonp=window.webpackJsonp||[]).push([[9],{708:function(n,t,e){"use strict";e.r(t);var o={mounted:function(){this.$router.push("/login")}},r=e(22),component=Object(r.a)(o,(function(){var n=this.$createElement;return(this._self._c||n)("div")}),[],!1,null,"90801018",null);t.default=component.exports}}]);
