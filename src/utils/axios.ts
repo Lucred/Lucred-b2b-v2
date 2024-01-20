@@ -2,11 +2,12 @@ import axios from "axios";
 
 
 const baseUrl = "https://lucred-backend.onrender.com/api/v1";
+// const baseUrl = "https://e3d5-105-112-203-82.ngrok-free.app/api/v1";
 
 export const apiGet = (path:string) => {
   const config = {
     headers: {
-      "x-merchant-token": `${localStorage.getItem("b2b-signature")}`
+      "x-hr-token": `${localStorage.getItem("b2b-signature")}`
     },
   };
 
@@ -16,7 +17,7 @@ export const apiGet = (path:string) => {
 export const apiPost = async (path:string, data:any) => {
   const config = {
     headers: {
-     "x-merchant-token": `${localStorage.getItem("b2b-signature")}`
+     "x-hr-token": `${localStorage.getItem("b2b-signature")}`
     },
   };
 
@@ -28,7 +29,7 @@ export const apiPost = async (path:string, data:any) => {
 export const FormDataPost = async (path:string, data:any) => {
   const config = {
     headers: {
-      "x-merchant-token": `${localStorage.getItem("b2b-signature")}`,
+      "x-hr-token": `${localStorage.getItem("b2b-signature")}`,
       "Content-Type": "multipart/form-data",
     },
   };
@@ -38,7 +39,7 @@ export const FormDataPost = async (path:string, data:any) => {
 export const apiPut = (path:string, data:object) => {
   const config = {
     headers: {
-      "x-merchant-token": `${localStorage.getItem("b2b-signature")}`,
+      "x-hr-token": `${localStorage.getItem("b2b-signature")}`,
       "Content-Type": [ "application/json"]
     },
   };
@@ -49,7 +50,7 @@ export const apiPut = (path:string, data:object) => {
 export const formDataPut = (path:string, data:object) => {
   const config = {
     headers: {
-      "x-merchant-token": `${localStorage.getItem("b2b-signature")}`,
+      "x-hr-token": `${localStorage.getItem("b2b-signature")}`,
       "Content-Type": "multipart/form-data"
     },
   };
@@ -60,7 +61,7 @@ export const formDataPut = (path:string, data:object) => {
 export const apiPatch = (path:string, data:object) => {
   const config = {
     headers: {
-      "x-merchant-token": `${localStorage.getItem("b2b-signature")}`,
+      "x-hr-token": `${localStorage.getItem("b2b-signature")}`,
       "Content-Type": [  "multipart/form-data", "application/json"]
     },
   };
@@ -71,7 +72,7 @@ export const apiPatch = (path:string, data:object) => {
 export const apiDelete = (path:string) => {
   const config = {
     headers: {
-      "x-merchant-token": `${localStorage.getItem("b2b-signature")}`
+      "x-hr-token": `${localStorage.getItem("b2b-signature")}`
     },
   };
 

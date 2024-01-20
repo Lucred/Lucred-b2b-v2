@@ -13,7 +13,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 
 const DashboardAddProduct = () => {
-  const id = localStorage.getItem("merchantId");
+  const id = localStorage.getItem("companyId");
 
   const [formData, setFormData] = useState<any>({
     title: "",

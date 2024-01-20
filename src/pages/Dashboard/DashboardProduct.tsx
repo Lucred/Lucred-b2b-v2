@@ -11,74 +11,74 @@ import phone from '../../assets/phone.png'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { useEffect } from 'react'
-import { deleteProduct, getProducts } from '../../redux/actions'
+import { deleteProduct, getEmployees } from '../../redux/actions'
 
 const DashboardProduct = () => {
     const dispatch = useDispatch() as unknown as any
-    const id = localStorage.getItem("merchantId") as unknown as string
+    const id = localStorage.getItem("companyId") as unknown as string
 
-    // const products = useSelector((state: any) => state.product)
-    const products = [
-        {
-            id: 1,
-            coverImage: img,
-            name: 'Jolly peter',
-            email: 'jollypeter@gmail.com',
-            jobTitle: 'Accountant',
-            gender: 'Male',
-            pay: '120,000',
-            phoneNo: '08130601026',
-            status: 'Full Time'
-        },
-        {
-            id: 2,
-            coverImage: img1,
-            name: 'Oyinkan Onasile',
-            email: 'oyinkanyonasile@gmail.com',
-            jobTitle: 'marketing',
-            gender: 'Female',
-            pay: '120,000',
-            phoneNo: '08130601026',
-            status: 'Full Time'
-        },
-        {
-            id: 3,
-            coverImage: img2,
-            name: 'Bethel Aboh',
-            email: 'bethelaboh@gmail.com',
-            jobTitle: 'Manager',
-            gender: 'Female',
-            pay: '120,000',
-            phoneNo: '08130601026',
-            status: 'Full Time'
-        },
-        {
-            id: 4,
-            coverImage: img3,
-            name: 'Emeka Collins',
-            email: 'emecollins@gmail.com',
-            jobTitle: 'Graphic Designer',
-            gender: 'Male',
-            pay: '120,000',
-            phoneNo: '08130601026',
-            status: 'Contract'
-        },
-        {
-            id: 5,
-            coverImage: img4,
-            name: 'Marvina Ojeri',
-            email: 'marvinaoj@gmail.com',
-            jobTitle: 'Marketing',
-            gender: 'Male',
-            pay: '120,000',
-            phoneNo: '08130601026',
-            status: 'Part Time'
-        },
-    ]
+    const employees = useSelector((state: any) => state.employees)
+    // const products = [
+    //     {
+    //         id: 1,
+    //         coverImage: img,
+    //         name: 'Jolly peter',
+    //         email: 'jollypeter@gmail.com',
+    //         jobTitle: 'Accountant',
+    //         gender: 'Male',
+    //         pay: '120,000',
+    //         phoneNo: '08130601026',
+    //         status: 'Full Time'
+    //     },
+    //     {
+    //         id: 2,
+    //         coverImage: img1,
+    //         name: 'Oyinkan Onasile',
+    //         email: 'oyinkanyonasile@gmail.com',
+    //         jobTitle: 'marketing',
+    //         gender: 'Female',
+    //         pay: '120,000',
+    //         phoneNo: '08130601026',
+    //         status: 'Full Time'
+    //     },
+    //     {
+    //         id: 3,
+    //         coverImage: img2,
+    //         name: 'Bethel Aboh',
+    //         email: 'bethelaboh@gmail.com',
+    //         jobTitle: 'Manager',
+    //         gender: 'Female',
+    //         pay: '120,000',
+    //         phoneNo: '08130601026',
+    //         status: 'Full Time'
+    //     },
+    //     {
+    //         id: 4,
+    //         coverImage: img3,
+    //         name: 'Emeka Collins',
+    //         email: 'emecollins@gmail.com',
+    //         jobTitle: 'Graphic Designer',
+    //         gender: 'Male',
+    //         pay: '120,000',
+    //         phoneNo: '08130601026',
+    //         status: 'Contract'
+    //     },
+    //     {
+    //         id: 5,
+    //         coverImage: img4,
+    //         name: 'Marvina Ojeri',
+    //         email: 'marvinaoj@gmail.com',
+    //         jobTitle: 'Marketing',
+    //         gender: 'Male',
+    //         pay: '120,000',
+    //         phoneNo: '08130601026',
+    //         status: 'Part Time'
+    //     },
+    // ]
 
 
     useEffect(() => {
-        dispatch(getProducts(id))
+        dispatch(getEmployees({ approvalStatus: "approved" }))
     }, [])
     return (
         <div className={`${window.innerWidth > 768 ? `ml-[15%]` : `ml-[8%]`} bg-[#1100770A]min-h-[100vh] `}>
@@ -112,16 +112,16 @@ const DashboardProduct = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {products?.map((elem: any, id: number) => (
+                                {employees?.map((elem: any, id: number) => (
                                     <tr key={id} className='bg-[#FFFFFF] text-[0.8rem] text-[#171515] text-center w-[100%] h-[10vh] '>
                                         <td className='font-[400] flex justify-center items-center h-[10vh]'><img src={elem.coverImage} alt="" className='h-[50px]' /></td>
-                                        <td className='font-[400]'>{elem.name}</td>
+                                        <td className='font-[400]'>{elem.firstname + ' ' + elem.lastname}</td>
                                         <td className='font-[400]'>{elem.email}</td>
-                                        <td className='font-[400]'>{elem.jobTitle}</td>
-                                        <td className='font-[400]'>{elem.gender}</td>
-                                        <td className='font-[400]'>₦{elem.pay}</td>
-                                        <td className='font-[400]'>{elem.phoneNo}</td>
-                                        <td className='font-[400]'>{elem.status}</td>
+                                        <td className='font-[400]'>{elem.workDataInfo[elem.workDataInfo.length - 1]?.jobTitle}</td>
+                                        <td className='font-[400]'>{elem.bvnData?.gender}</td>
+                                        <td className='font-[400]'>₦{elem.workDataInfo[elem.workDataInfo.length - 1]?.workSalary}</td>
+                                        <td className='font-[400]'>{elem.phone}</td>
+                                        <td className='font-[400]'>{elem.workDataInfo[elem.workDataInfo.length - 1]?.employmentStatus}</td>
                                         <td className='font-[400]  '><div className='flex items-center justify-center'><Link to={`/dashboard/employees/${elem._id}`}><img src={view} className='mx-[2px]' alt="" /></Link><Link to={`/dashboard/update-employee/${elem._id}`}><img src={edit} className='mx-[2px]' alt="" /> </Link><img src={trash} className='mx-[2px]' alt="" onClick={async () => await dispatch(deleteProduct(elem._id))} /> </div> </td>
 
                                     </tr>))}

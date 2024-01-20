@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { LoginData } from "../interface";
 import { FormDataPost, apiDelete, apiGet, apiPatch, apiPost, apiPut, formDataPut } from "../utils/axios";
-import { fetchDataFailure, fetchProduct, fetchDataStart, fetchDataSuccess, fetchDataUser, fetchCategories } from "./reducer";
+import { fetchDataFailure, fetchProduct, fetchDataStart, fetchDataSuccess, fetchDataUser, fetchCategories, fetchEmployees } from "./reducer";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -11,15 +11,17 @@ export const loginUser = createAsyncThunk(
   async (formData: LoginData, { dispatch }) => {
     try {
       dispatch(fetchDataStart);
-      // const response = await apiPost("/hr/login", formData);
-      const response = await apiPost("/merchants/login", formData);
+      const response = await apiPost("/company/hr/login", formData);
       console.log(response)
-      localStorage.setItem("userId", response.data.data._id);
-      localStorage.setItem("merchantId", response.data.data.merchantId);
+      localStorage.setItem("userId", response.data.data.hrData._id);
+      localStorage.setItem("companyId", response.data.data.companyData._id);
       localStorage.setItem("b2b-signature", response.data.data.token);
-      localStorage.setItem("logo", response.data.data.logo)
+      localStorage.setItem("logo", response.data.data.companyData.logo)
+      localStorage.setItem("email", response.data.data.companyData.emailAddress)
       toast.success(response.data.message);
-      dispatch(fetchDataSuccess(response.data));
+      console.log('response.data.data', response.data.data);
+
+      dispatch(fetchDataSuccess(response.data.data));
       setTimeout(() => {
         window.location.href = "/dashboard";
       }, 2000);
@@ -55,7 +57,7 @@ export const registerUser = createAsyncThunk(
 /**==============Get Merchant======= **/
 export const getMerchant = createAsyncThunk(
   "singleUser",
-  async (id:string, { dispatch }) => {
+  async (id: string, { dispatch }) => {
     try {
       dispatch(fetchDataStart);
       const response = await apiGet(`/merchants/${id}`);
@@ -91,7 +93,7 @@ export const getCategories = createAsyncThunk(
 /**==============Create Products======= **/
 export const createProducts = createAsyncThunk(
   "getProducts",
-  async (formData:any, { dispatch }) => {
+  async (formData: any, { dispatch }) => {
     try {
       dispatch(fetchDataStart);
       const response = await FormDataPost(`/products`, formData);
@@ -108,7 +110,7 @@ export const createProducts = createAsyncThunk(
 /**==============Get Products======= **/
 export const getProducts = createAsyncThunk(
   "getProducts",
-  async (id:string, { dispatch }) => {
+  async (id: string, { dispatch }) => {
     try {
       dispatch(fetchDataStart);
       const response = await apiGet(`/products?merchantId=${id}&page=1&size=10`);
@@ -122,10 +124,27 @@ export const getProducts = createAsyncThunk(
   }
 );
 
+/**==============Get Employees======= **/
+export const getEmployees = createAsyncThunk(
+  "getEmployees",
+  async (formData: { approvalStatus?: string }, { dispatch }) => {
+    try {
+      dispatch(fetchDataStart);
+      const response = await apiPost("/company/get-employees", formData ? formData : '');
+      // console.log('response.data', response.data);
+      dispatch(fetchEmployees(response.data.data));
+    } catch (error: any) {
+      console.log(error.response.data.error);
+      toast.error(error.response.data.Error);
+      dispatch(fetchDataFailure(error.response.data.error));
+    }
+  }
+);
+
 /**============== Update Employees======= **/
 export const updateProduct = createAsyncThunk(
   "updateProduct",
-  async ({id, formData}:{id:any, formData:any}, { dispatch }) => {
+  async ({ id, formData }: { id: any, formData: any }, { dispatch }) => {
     try {
       dispatch(fetchDataStart);
       const response = await formDataPut(`/products/${id}`, formData);
@@ -142,7 +161,7 @@ export const updateProduct = createAsyncThunk(
 /**==============Deleter Products======= **/
 export const deleteProduct = createAsyncThunk(
   "deleteProduct",
-  async (id:string, { dispatch }) => {
+  async (id: string, { dispatch }) => {
     try {
       dispatch(fetchDataStart);
       const response = await apiDelete(`/products/${id}`);
@@ -159,7 +178,7 @@ export const deleteProduct = createAsyncThunk(
 /**==============Update Logo=======  **/
 export const updateLogo = createAsyncThunk(
   "updateLogo",
-  async ({id, imageData}:any, { dispatch }) => {
+  async ({ id, imageData }: any, { dispatch }) => {
     try {
       dispatch(fetchDataStart);
       const response = await formDataPut(`/merchants/update/${id}/logo`, imageData);
@@ -177,7 +196,7 @@ export const updateLogo = createAsyncThunk(
 /**==============Update Profile=======  **/
 export const updateProfile = createAsyncThunk(
   "updateProfile",
-  async ({id, formData}:any, { dispatch }) => {
+  async ({ id, formData }: any, { dispatch }) => {
     try {
       dispatch(fetchDataStart);
       const response = await apiPut(`/merchants/${id}`, formData);
@@ -196,7 +215,7 @@ export const updateProfile = createAsyncThunk(
 /**==============Update Profile=======  **/
 export const withdraw = createAsyncThunk(
   "withdraw",
-  async (formData:any, { dispatch }) => {
+  async (formData: any, { dispatch }) => {
     try {
       dispatch(fetchDataStart);
       const response = await apiPut(`/merchants/withdraw`, formData);
@@ -215,8 +234,8 @@ export const withdraw = createAsyncThunk(
 
 
 
-  /**==============Logout ======= **/
-  export const Logout = () => {
-    localStorage.clear();
-    window.location.href = "/login";
-  };
+/**==============Logout ======= **/
+export const Logout = () => {
+  localStorage.clear();
+  window.location.href = "/login";
+};

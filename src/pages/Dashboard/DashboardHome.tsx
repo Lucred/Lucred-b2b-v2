@@ -11,22 +11,25 @@ import seemore from "../../assets/seemore.png";
 import Help from "./Help";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getMerchant } from "../../redux/actions";
+import { truncateString } from "../../utils/serviceUtils";
+// import { getMerchant } from "../../redux/actions";
 
 const DashboardHome = () => {
   const [showHelp, setShowHelp] = useState(false)
 
-  const merchant = useSelector((state: any) => state.merchant)
+  const company = useSelector((state: any) => state.data)
+  console.log('v', company);
+
 
   const dispatch = useDispatch() as unknown as any
   const id = localStorage.getItem('userId') as unknown as string
 
-  console.log(merchant)
+  console.log(company)
 
 
-  useEffect(() => {
-    dispatch(getMerchant(id))
-  }, [])
+  // useEffect(() => {
+  //   dispatch(getMerchant(id))
+  // }, [])
 
   return (
     <div className={`${window.innerWidth > 768 ? `ml-[15%]` : `ml-[10%]`} bg-[#1100770A] lg:h-[100vh]  `}>
@@ -69,10 +72,10 @@ const DashboardHome = () => {
 
         <div className=" w-[100%] overflow-x-scroll">
           <div className="flex justify-between w-[250%] lg:w-[100%] my-[5%] lg:my-[0%] ">
-            <AnalyticCard width={`w-[23%]`} icon={revenue} total={`Total Number of Employees`} amount={`₦` + merchant?.currentRevenue} />
-            <AnalyticCard width={`w-[23%]`} icon={customer} total={`Days Until Next Payment`} amount={merchant?.customers?.length || 0} />
-            <AnalyticCard width={`w-[23%]`} icon={transaction} total={`Total Number of Credit`} amount={merchant?.withdrawals?.length || 0} />
-            <AnalyticCard width={`w-[23%]`} icon={product} total={`Due Payment`} amount={merchant?.products?.length || 0} />
+            <AnalyticCard width={`w-[23%]`} icon={revenue} total={`Total Number of Employees`} amount={`₦` + company?.totalEmployees} />
+            <AnalyticCard width={`w-[23%]`} icon={customer} total={`Days Until Next Payment`} amount={company?.customers?.length || 0} />
+            <AnalyticCard width={`w-[23%]`} icon={transaction} total={`Total Number of Credit`} amount={company?.withdrawals?.length || 0} />
+            <AnalyticCard width={`w-[23%]`} icon={product} total={`Due Payment`} amount={company?.products?.length || 0} />
           </div>
 
         </div>
@@ -102,6 +105,7 @@ export default DashboardHome;
 export const DashNav = () => {
   const location = useLocation();
   const logo = localStorage.getItem("logo")
+  const email = localStorage.getItem("email")
   return (
     <div className="flex justify-between items-center bg-[#533AE90D] px-[3%] h-[8vh]">
       <div className="w-[50%] bg-[#FFFFFF] flex items-center justify-start h-[5vh] ">
@@ -125,7 +129,7 @@ export const DashNav = () => {
         <img src={logo || avatar} alt="" className="h-[3.5vh] w-[3.5vh] mr-[5%] rounded-[50%]" />
         <div className="flex">
           Company HR <br />
-          chuks@yahoo.com
+          {email && truncateString(email, 15)}
         </div>
       </div>
     </div>

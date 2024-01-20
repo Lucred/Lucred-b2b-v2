@@ -16,7 +16,7 @@ import { SelectInput, TextAreaInput, TextInput } from "./DashboardAddProduct";
 
 const SingleProduct = () => {
     const dispatch = useDispatch() as unknown as any
-    const id = localStorage.getItem("merchantId") as unknown as string
+    const id = localStorage.getItem("companyId") as unknown as string
 
     const products = useSelector((state:any) => state.product)
     console.log(products)

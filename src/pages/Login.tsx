@@ -10,7 +10,7 @@ import { loginUser } from '../redux/actions'
 
 const Login = () => {
     const [formData, setFormData] = useState<any>({
-        email: "",
+        emailAddress: "",
         password: ""
     })
     const [loading, setLoading] = useState(false)
@@ -42,7 +42,7 @@ const Login = () => {
                     </div>
                     <div className='text-left my-[2%]' >
                         <label className='text-[#171515]'>Email</label><br></br>
-                        <input type="text" name="email" placeholder="Enter your email" className='border rounded-md w-[100%] lg:w-[70%] pl-[5%] py-[1%]' onChange={handleChange} />
+                        <input type="text" name="emailAddress" placeholder="Enter your email" className='border rounded-md w-[100%] lg:w-[70%] pl-[5%] py-[1%]' onChange={handleChange} />
                     </div>
                     <div className='text-left'>
                         <label>Password</label><br></br>
