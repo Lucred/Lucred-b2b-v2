@@ -1,21 +1,21 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 export interface State {
-  data: any[];
+  data: any;
   employees: any[];
-  merchant: any[];
-  product: any[];
-  categories:any[];
+  company: any[];
+  singleEmployee: any;
+  transactions:any[];
   loading: boolean;
   error: string | null;
 }
 
 const initialState: State = {
-  data: [],
+  data: {},
   employees: [],
-  merchant: [],
-  product: [],
-  categories:[],
+  company: [],
+  singleEmployee: {},
+  transactions:[],
   loading: false,
   error: null,
 };
@@ -28,7 +28,7 @@ const dataSlice = createSlice({
       state.loading = true;
       state.error = null;
     },
-    fetchDataSuccess: (state, action: PayloadAction<any[]>) => {
+    fetchDataSuccess: (state, action: PayloadAction<any>) => {
       state.loading = false;
       state.data = action.payload;
     },
@@ -38,15 +38,15 @@ const dataSlice = createSlice({
     },
     fetchDataUser: (state, action: PayloadAction<any[]>) => {
       state.loading = false;
-      state.merchant = action.payload;
+      state.company = action.payload;
     },
-    fetchProduct : (state, action: PayloadAction<any[]>) => {
+    fetchSingleEmployee : (state, action: PayloadAction<any[]>) => {
       state.loading = false;
-      state.product = action.payload;
+      state.singleEmployee = action.payload;
     },
-    fetchCategories : (state, action: PayloadAction<any[]>) => {
+    fetchTransactions : (state, action: PayloadAction<any[]>) => {
       state.loading = false;
-      state.categories = action.payload;
+      state.transactions = action.payload;
     },
     fetchDataFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
@@ -55,6 +55,6 @@ const dataSlice = createSlice({
   },
 });
 
-export const { fetchDataStart, fetchDataSuccess, fetchEmployees, fetchDataUser, fetchProduct, fetchDataFailure, fetchCategories} = dataSlice.actions;
+export const { fetchDataStart, fetchDataSuccess, fetchEmployees, fetchDataUser, fetchSingleEmployee, fetchDataFailure, fetchTransactions} = dataSlice.actions;
 
 export default dataSlice.reducer;

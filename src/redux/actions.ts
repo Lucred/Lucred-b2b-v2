@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { LoginData } from "../interface";
 import { FormDataPost, apiDelete, apiGet, apiPatch, apiPost, apiPut, formDataPut } from "../utils/axios";
-import { fetchDataFailure, fetchProduct, fetchDataStart, fetchDataSuccess, fetchDataUser, fetchCategories, fetchEmployees } from "./reducer";
+import { fetchDataFailure, fetchDataStart, fetchDataSuccess, fetchDataUser, fetchEmployees, fetchTransactions, fetchSingleEmployee } from "./reducer";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -19,12 +19,8 @@ export const loginUser = createAsyncThunk(
       localStorage.setItem("logo", response.data.data.companyData.logo)
       localStorage.setItem("email", response.data.data.companyData.emailAddress)
       toast.success(response.data.message);
-      console.log('response.data.data', response.data.data);
 
       dispatch(fetchDataSuccess(response.data.data));
-      setTimeout(() => {
-        window.location.href = "/dashboard";
-      }, 2000);
     } catch (error: any) {
       console.log(error.response);
       toast.error(error.response.statusText);
@@ -54,68 +50,15 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-/**==============Get Merchant======= **/
-export const getMerchant = createAsyncThunk(
-  "singleUser",
-  async (id: string, { dispatch }) => {
-    try {
-      dispatch(fetchDataStart);
-      const response = await apiGet(`/merchants/${id}`);
-      console.log(response)
-      dispatch(fetchDataUser(response.data.data));
-    } catch (error: any) {
-      console.log(error.response.data.error);
-      toast.error(error.response.data.Error);
-      dispatch(fetchDataFailure(error.response.data.error));
-    }
-  }
-);
-
-
-
-/**==============Get Categories======= **/
-export const getCategories = createAsyncThunk(
-  "getCategories",
+/**==============Get Dashboard Info======= **/
+export const getDashboardInfo = createAsyncThunk(
+  "dashboadInfo",
   async (_, { dispatch }) => {
     try {
       dispatch(fetchDataStart);
-      const response = await apiGet(`/categories`);
-      console.log('resp', response.data.data)
-      dispatch(fetchCategories(response.data.data));
-    } catch (error: any) {
-      console.log(error.response.data.error);
-      toast.error(error.response.data.Error);
-      dispatch(fetchDataFailure(error.response.data.error));
-    }
-  }
-);
-
-/**==============Create Products======= **/
-export const createProducts = createAsyncThunk(
-  "getProducts",
-  async (formData: any, { dispatch }) => {
-    try {
-      dispatch(fetchDataStart);
-      const response = await FormDataPost(`/products`, formData);
-      dispatch(fetchProduct(response.data.data));
-      toast.success(response.data.message);
-    } catch (error: any) {
-      console.log(error.response.data.error);
-      toast.error(error.response.data.Error);
-      dispatch(fetchDataFailure(error.response.data.error));
-    }
-  }
-);
-
-/**==============Get Products======= **/
-export const getProducts = createAsyncThunk(
-  "getProducts",
-  async (id: string, { dispatch }) => {
-    try {
-      dispatch(fetchDataStart);
-      const response = await apiGet(`/products?merchantId=${id}&page=1&size=10`);
-      console.log(response.data)
-      dispatch(fetchProduct(response.data.data));
+      const response = await apiGet(`/company/dashboard`);
+      console.log(response)
+      dispatch(fetchDataUser(response.data.data));
     } catch (error: any) {
       console.log(error.response.data.error);
       toast.error(error.response.data.Error);
@@ -196,15 +139,11 @@ export const updateLogo = createAsyncThunk(
 /**==============Update Profile=======  **/
 export const updateProfile = createAsyncThunk(
   "updateProfile",
-  async ({ id, formData }: any, { dispatch }) => {
+  async ({ formData }: any, { dispatch }) => {
     try {
       dispatch(fetchDataStart);
-      const response = await apiPut(`/merchants/${id}`, formData);
+      const response = await apiPut(`/company/update`, formData);
       toast.success(response.data.message);
-      dispatch(fetchDataSuccess(response.data));
-      setTimeout(() => {
-        window.location.href = "/dashboard/profile";
-      }, 2000);
     } catch (error: any) {
       toast.error(error.response.data.message);
       dispatch(fetchDataFailure(error.response.data.error));
@@ -231,6 +170,55 @@ export const withdraw = createAsyncThunk(
   }
 );
 
+/**==============Approve Employees======= **/
+export const approveEmployees = createAsyncThunk(
+  "approveEmployees",
+  async (id: string, { dispatch }) => {
+    try {
+      dispatch(fetchDataStart);
+      const response = await apiPost(`/company/approve-employees${id}`, {});
+      toast.success(response.data.message);
+      dispatch(getEmployees({ approvalStatus: "approved" }))
+    } catch (error: any) {
+      console.log(error.response.data.error);
+      toast.error(error.response.data.Error);
+      dispatch(fetchDataFailure(error.response.data.error));
+    }
+  }
+);
+
+/**==============Get Employee Transactions======= **/
+export const getEmployeeTransactions = createAsyncThunk(
+  "getEmployeeTransactions",
+  async (_, { dispatch }) => {
+    try {
+      dispatch(fetchDataStart);
+      const response = await apiGet(`/company/employees-transaction`);
+      dispatch(fetchTransactions(response.data.data));
+    } catch (error: any) {
+      console.log(error.response.data.error);
+      toast.error(error.response.data.Error);
+      dispatch(fetchDataFailure(error.response.data.error));
+    }
+  }
+);
+
+/**==============Get Employee Transactions======= **/
+export const getSingleEmployee = createAsyncThunk(
+  "getSingleEmployee",
+  async (id: string, { dispatch }) => {
+    try {
+      dispatch(fetchDataStart);
+      const response = await apiGet(`/company/employee-profile/${id}`);
+      console.log(response.data)
+      dispatch(fetchSingleEmployee(response.data));
+    } catch (error: any) {
+      console.log(error.response.data.error);
+      toast.error(error.response.data.Error);
+      dispatch(fetchDataFailure(error.response.data.error));
+    }
+  }
+);
 
 
 

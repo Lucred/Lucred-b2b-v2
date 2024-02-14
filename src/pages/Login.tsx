@@ -6,7 +6,8 @@ import alcatel from '../assets/alcatel.png'
 import loginImg from '../assets/loginImg.png'
 import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { loginUser } from '../redux/actions'
+import { getDashboardInfo, getEmployeeTransactions, loginUser } from '../redux/actions'
+import { useNavigate } from 'react-router-dom'
 
 const Login = () => {
     const [formData, setFormData] = useState<any>({
@@ -22,12 +23,16 @@ const Login = () => {
     }
 
     const dispatch = useDispatch() as unknown as any
+    const navigate = useNavigate()
 
     const handleSubmit = async (e: any) => {
         setLoading(true)
         e.preventDefault()
         console.log("Form submitted", formData)
         await dispatch(loginUser(formData))
+        await dispatch(getDashboardInfo())
+        await dispatch(getEmployeeTransactions())
+        navigate('/dashboard');
         setLoading(false)
     }
 

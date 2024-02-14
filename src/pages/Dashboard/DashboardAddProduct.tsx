@@ -5,11 +5,7 @@ import mac from "../../assets/mac1.jpeg";
 import { categories } from "../../data/categories";
 import { Link, useLocation, useParams } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-import {
-  createProducts,
-  getCategories,
-  updateProduct,
-} from "../../redux/actions";
+import { updateProduct } from "../../redux/actions";
 import { useDispatch, useSelector } from "react-redux";
 
 const DashboardAddProduct = () => {
@@ -152,8 +148,7 @@ const DashboardAddProduct = () => {
   console.log(formData);
 
   const handleSubmit = async (e: any) => {
-    e.preventDefault();
-    await dispatch(createProducts(formData));
+
   };
 
   const updateSubmit = async (e: any) => {

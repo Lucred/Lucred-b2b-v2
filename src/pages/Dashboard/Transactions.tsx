@@ -10,10 +10,10 @@ import img2 from '../../assets/img2.png'
 import img3 from '../../assets/img3.png'
 import img4 from '../../assets/img4.png'
 import { useEffect, useState } from "react"
-import { getMerchant, withdraw } from "../../redux/actions"
+import { getEmployeeTransactions, withdraw } from "../../redux/actions"
 import { useDispatch, useSelector } from "react-redux"
 
-const SalesInfo = () => {
+const Transactions = () => {
     const location = useLocation()
 
     const [showModal, setShowModal] = useState(false)
@@ -21,95 +21,92 @@ const SalesInfo = () => {
         setShowModal(!showModal)
     }
 
-    // const merchant = useSelector((state: any) => state.merchant)
+    // const transactions = useSelector((state: any) => state.transactions)
+    const transactions = {
+        totalCredit: 50000,
+        totalActiveCredit: 50000,
+        totalDuePayment: 0,
+        employeesData: [
+            {
+                userId: "658778e9b97e43b88224744b",
+                name: "solomon aboki",
+                email: "lotrigogeff@gmail.com",
+                phoneNumber: "+2349138174761",
+                workData: [
+                    {
+                        companyName: "Adeboye Group",
+                        jobTitle: "Software Developer",
+                        employmentStatus: "Full time",
+                        employeeEmailAddress: "boye@adeboyeboye.com",
+                        isWorkDataVerified: true,
+                        workSalary: "400,000",
+                        proofOfWork: "https://firebasestorage.googleapis.com/v0/b/lucred-715bc.appspot.com/o/company%2Fhair%20salon.jpeg?alt=media&token=af836869-cb16-4a9a-87d2-ad80d280632d",
+                        company: {
+                            _id: "65a542fe79a8ab83d00c217a",
+                            name: "Adeboye Group",
+                            address: "Ogunrinde Str Lagos",
+                            emailAddress: "adeboyesamueladeyemi@adeboyegroup.com",
+                            totalEmployees: 50,
+                            cacNumber: "2e3rr4e3",
+                            companyId: "#d78217",
+                            phoneNumber: "+2348134488510",
+                            city: "Ikeja",
+                            country: "Canada",
+                            logo: "https://firebasestorage.googleapis.com/v0/b/lucred-715bc.appspot.com/o/company%2FbarbingImg.jpeg?alt=media&token=ae342462-a6bc-4adf-b15d-da9d7b61e1ed",
+                            isCompanyActive: false,
+                            totalHR: 5,
+                            createdBy: "6358667bcf19ce096fb7545f",
+                            createdAt: "2024-01-15T14:36:46.124Z",
+                            updatedAt: "2024-01-30T17:31:33.562Z",
+                            __v: 0,
+                            payDay: 29
+                        },
+                        _id: "65a547a879a8ab83d00c2192"
+                    }
+                ],
+                currentCredit: 50000,
+                totalCredit: 50000,
+                status: "Active",
+                date: "2024-01-29T00:00:00.000Z"
+            }
+        ]
+    }
+
 
     const dispatch = useDispatch() as unknown as any
-    const id = localStorage.getItem('userId') as unknown as string
 
-    const transaction = [
-        {
-            coverImage: img,
-            name: 'Jolly peter',
-            email: 'jollypeter@gmail.com',
-            jobTitle: 'Accountant',
-            currentCredit: '50,000/03-05-2023',
-            totalCredit: '120,000',
-            phoneNo: '08130601026',
-            status: 'Active'
-        },
-        {
-            coverImage: img1,
-            name: 'Oyinkan Onasile',
-            email: 'oyinkanyonasile@gmail.com',
-            jobTitle: 'marketing',
-            currentCredit: '30,000/03-05-2023',
-            totalCredit: '120,000',
-            phoneNo: '08130601026',
-            status: 'Inactive'
-        },
-        {
-            coverImage: img2,
-            name: 'Bethel Aboh',
-            email: 'bethelaboh@gmail.com',
-            jobTitle: 'Manager',
-            currentCredit: '100,000/03-05-2023',
-            totalCredit: '120,000',
-            phoneNo: '08130601026',
-            status: 'Active'
-        },
-        {
-            coverImage: img3,
-            name: 'Emeka Collins',
-            email: 'emecollins@gmail.com',
-            jobTitle: 'Graphic Designer',
-            currentCredit: '150,000/03-05-2023',
-            totalCredit: '120,000',
-            phoneNo: '08130601026',
-            status: 'Inactive'
-        },
-        {
-            coverImage: img4,
-            name: 'Marvina Ojeri',
-            email: 'marvinaoj@gmail.com',
-            jobTitle: 'Marketing',
-            currentCredit: '70,000/03-05-2023',
-            totalCredit: '120,000',
-            phoneNo: '08130601026',
-            status: 'Active'
-        },
-    ]
-
-    // console.log(merchant)
+    console.log(transactions)
 
 
     useEffect(() => {
-        dispatch(getMerchant(id))
+        dispatch(getEmployeeTransactions())
     }, [])
 
     return (
         <div className={`${window.innerWidth > 768 ? `ml-[15%]` : `ml-[10%]`} bg-[#1100770A]min-h-[100vh] `}>
             <div className='mx-[3%]'>
-                <div className="flex items-center justify-between">
+                <div className="">
                     <div className='py-[1%]'>
                         <p className='text-[0.7rem]'>Dashboard/Transactions</p>
                         <h3 className='text-[1.3rem] font-[500]'>Transactions</h3>
                     </div>
-                    {location.pathname === "/dashboard/statistics" ? <Link to="" className='bg-[#533AE9] lg:w-[15%] w-[50%] h-[5vh] text-[#fff] mr-[5%] rounded-md flex justify-center items-center' onClick={toggleModal}>Withdraw</Link> : null}
-
-                </div>
-                {/* <div className="flex lg:flex-row flex-col justify-between my-[3%] lg:my-[0%]">
-                <div className=" w-[100%] overflow-scroll">
-                    <div className="lg:w-[65%] md:w-[100%] w-[150%] flex justify-between ">
-                        <AnalyticCard width={`w-[45%]`} total={`Sales`} amount={`₦` + merchant?.currentRevenue || 0} />
-                        <AnalyticCard width={`w-[45%]`} total={`Balance`} amount={`₦` + merchant?.walletBalance || 0}  />
+                    <div className='flex items-center justify-start my-[2%]'>
+                        <div className="px-[8%] py-[4%] bg-[#110077] text-[#fff] border rounded-xl mr-[2%]">
+                            <div className="font-[400] text-[1.2rem]">Total Credit</div>
+                            <div className="font-[700] text-[1.2rem] pt-[1%]">NGN {transactions.totalCredit}</div>
+                        </div>
+                        <div className="px-[8%] py-[4%] bg-[#32C38F] text-[#fff] border rounded-xl mr-[2%]">
+                            <div className="font-[400] text-[1.2rem]">Active Credit</div>
+                            <div className="font-[700] text-[1.2rem] pt-[1%]">NGN {transactions.totalActiveCredit}</div>
+                        </div>
+                        <div className="px-[8%] py-[4%] bg-[#D72D2DB2] text-[#fff] border rounded-xl">
+                            <div className="font-[400] text-[1.2rem]">Due Payment</div>
+                            <div className="font-[700] text-[1.2rem] pt-[1%]">NGN {transactions.totalDuePayment}</div>
+                        </div>
                     </div>
-
                 </div>
-               
-                <SelectInput  width={`lg:w-[30%] md:w-[50%]`} value={`Today (March 18, 2022)`}/>
-            </div> */}
                 <div className='flex items-center justify-between'>
-                    <div className='lg:w-[25%] w-[50%] bg-[#FFFFFF] flex items-center justify-center h-[5vh] border border-[#C3C3C4] rounded-md'>
+                    <div className='lg:w-[25%] w-[50%] bg-[#FFFFFF] flex items-center justify-center h-[5vh] border border-[#C3C3C4] rounded-lg'>
                         <img src={search} alt="" className='h-[2vh] mr-[5%] pl-[5%] lg:pr-[0%]' />
                         <input type="text" placeholder='Search' className='border-none h-[5vh] text-[#707070] outline-none bg-[transparent]' />
                     </div>
@@ -135,13 +132,13 @@ const SalesInfo = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {transaction?.map((elem: any, id: number) => (
+                            {transactions?.employeesData?.map((elem: any, id: number) => (
                                 <tr key={id} className='bg-[#FFFFFF] text-[0.8rem] text-[#171515] text-center w-[100%] h-[10vh] '>
                                     <td className='font-[400] flex justify-center items-center h-[10vh]'><img src={elem.coverImage} alt="" className='h-[50px]' /></td>
                                     <td className='font-[400]'>{elem.name}</td>
                                     <td className='font-[400]'>{elem.email}</td>
-                                    <td className='font-[400]'>{elem.jobTitle}</td>
-                                    <td className='font-[400]'>{elem.phoneNo}</td>
+                                    <td className='font-[400]'>{elem.workData?.[0]?.jobTitle}</td>
+                                    <td className='font-[400]'>{elem.phoneNumber}</td>
                                     <td className='font-[400]'>₦{elem.currentCredit}</td>
                                     <td className='font-[400]'>₦{elem.totalCredit}</td>
                                     <td className={`${elem.status === 'Active' ? 'text-[#32C38F]' : 'text-[#D72D2D]'} font-[400]`}>{elem.status}</td>
@@ -158,7 +155,7 @@ const SalesInfo = () => {
     )
 }
 
-export default SalesInfo
+export default Transactions
 
 export const WithdrawModal = ({ func }: any) => {
     const [formData, setFormData] = useState<any>({
