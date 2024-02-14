@@ -21,56 +21,56 @@ const Transactions = () => {
         setShowModal(!showModal)
     }
 
-    // const transactions = useSelector((state: any) => state.transactions)
-    const transactions = {
-        totalCredit: 50000,
-        totalActiveCredit: 50000,
-        totalDuePayment: 0,
-        employeesData: [
-            {
-                userId: "658778e9b97e43b88224744b",
-                name: "solomon aboki",
-                email: "lotrigogeff@gmail.com",
-                phoneNumber: "+2349138174761",
-                workData: [
-                    {
-                        companyName: "Adeboye Group",
-                        jobTitle: "Software Developer",
-                        employmentStatus: "Full time",
-                        employeeEmailAddress: "boye@adeboyeboye.com",
-                        isWorkDataVerified: true,
-                        workSalary: "400,000",
-                        proofOfWork: "https://firebasestorage.googleapis.com/v0/b/lucred-715bc.appspot.com/o/company%2Fhair%20salon.jpeg?alt=media&token=af836869-cb16-4a9a-87d2-ad80d280632d",
-                        company: {
-                            _id: "65a542fe79a8ab83d00c217a",
-                            name: "Adeboye Group",
-                            address: "Ogunrinde Str Lagos",
-                            emailAddress: "adeboyesamueladeyemi@adeboyegroup.com",
-                            totalEmployees: 50,
-                            cacNumber: "2e3rr4e3",
-                            companyId: "#d78217",
-                            phoneNumber: "+2348134488510",
-                            city: "Ikeja",
-                            country: "Canada",
-                            logo: "https://firebasestorage.googleapis.com/v0/b/lucred-715bc.appspot.com/o/company%2FbarbingImg.jpeg?alt=media&token=ae342462-a6bc-4adf-b15d-da9d7b61e1ed",
-                            isCompanyActive: false,
-                            totalHR: 5,
-                            createdBy: "6358667bcf19ce096fb7545f",
-                            createdAt: "2024-01-15T14:36:46.124Z",
-                            updatedAt: "2024-01-30T17:31:33.562Z",
-                            __v: 0,
-                            payDay: 29
-                        },
-                        _id: "65a547a879a8ab83d00c2192"
-                    }
-                ],
-                currentCredit: 50000,
-                totalCredit: 50000,
-                status: "Active",
-                date: "2024-01-29T00:00:00.000Z"
-            }
-        ]
-    }
+    const transactions = useSelector((state: any) => state.transactions)
+    // const transactions = {
+    //     totalCredit: 50000,
+    //     totalActiveCredit: 50000,
+    //     totalDuePayment: 0,
+    //     employeesData: [
+    //         {
+    //             userId: "658778e9b97e43b88224744b",
+    //             name: "solomon aboki",
+    //             email: "lotrigogeff@gmail.com",
+    //             phoneNumber: "+2349138174761",
+    //             workData: [
+    //                 {
+    //                     companyName: "Adeboye Group",
+    //                     jobTitle: "Software Developer",
+    //                     employmentStatus: "Full time",
+    //                     employeeEmailAddress: "boye@adeboyeboye.com",
+    //                     isWorkDataVerified: true,
+    //                     workSalary: "400,000",
+    //                     proofOfWork: "https://firebasestorage.googleapis.com/v0/b/lucred-715bc.appspot.com/o/company%2Fhair%20salon.jpeg?alt=media&token=af836869-cb16-4a9a-87d2-ad80d280632d",
+    //                     company: {
+    //                         _id: "65a542fe79a8ab83d00c217a",
+    //                         name: "Adeboye Group",
+    //                         address: "Ogunrinde Str Lagos",
+    //                         emailAddress: "adeboyesamueladeyemi@adeboyegroup.com",
+    //                         totalEmployees: 50,
+    //                         cacNumber: "2e3rr4e3",
+    //                         companyId: "#d78217",
+    //                         phoneNumber: "+2348134488510",
+    //                         city: "Ikeja",
+    //                         country: "Canada",
+    //                         logo: "https://firebasestorage.googleapis.com/v0/b/lucred-715bc.appspot.com/o/company%2FbarbingImg.jpeg?alt=media&token=ae342462-a6bc-4adf-b15d-da9d7b61e1ed",
+    //                         isCompanyActive: false,
+    //                         totalHR: 5,
+    //                         createdBy: "6358667bcf19ce096fb7545f",
+    //                         createdAt: "2024-01-15T14:36:46.124Z",
+    //                         updatedAt: "2024-01-30T17:31:33.562Z",
+    //                         __v: 0,
+    //                         payDay: 29
+    //                     },
+    //                     _id: "65a547a879a8ab83d00c2192"
+    //                 }
+    //             ],
+    //             currentCredit: 50000,
+    //             totalCredit: 50000,
+    //             status: "Active",
+    //             date: "2024-01-29T00:00:00.000Z"
+    //         }
+    //     ]
+    // }
 
 
     const dispatch = useDispatch() as unknown as any
