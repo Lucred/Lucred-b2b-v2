@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux'
 
 const Settings = () => {
     const navigate = useNavigate()
-    const company = useSelector((state: any) => state.data)?.companyData
+    const company = useSelector((state: any) => state.companyProfile)
     const [loading, setLoading] = useState(false)
     const [formData, setFormData] = useState<any>({
         name: company?.name,

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { LoginData } from "../interface";
 import { FormDataPost, apiDelete, apiGet, apiPatch, apiPost, apiPut, formDataPut } from "../utils/axios";
-import { fetchDataFailure, fetchDataStart, fetchDataSuccess, fetchDataUser, fetchEmployees, fetchTransactions, fetchSingleEmployee } from "./reducer";
+import { fetchDataFailure, fetchDataStart, fetchDataSuccess, fetchDataUser, fetchEmployees, fetchTransactions, fetchSingleEmployee, fetchCompanyDataSuccess } from "./reducer";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -15,12 +15,13 @@ export const loginUser = createAsyncThunk(
       console.log(response)
       localStorage.setItem("userId", response.data.data.hrData._id);
       localStorage.setItem("companyId", response.data.data.companyData._id);
+      localStorage.setItem("authcompanyId", response.data.data.companyData.companyId);
       localStorage.setItem("b2b-signature", response.data.data.token);
       localStorage.setItem("logo", response.data.data.companyData.logo)
       localStorage.setItem("email", response.data.data.companyData.emailAddress)
       toast.success(response.data.message);
-
       dispatch(fetchDataSuccess(response.data.data));
+      dispatch(fetchCompanyDataSuccess(response.data.data.companyData));
     } catch (error: any) {
       console.log(error.response);
       toast.error(error.response.statusText);
@@ -144,6 +145,7 @@ export const updateProfile = createAsyncThunk(
       dispatch(fetchDataStart);
       const response = await apiPut(`/company/update`, formData);
       toast.success(response.data.message);
+      dispatch(getCompanyDetails())
     } catch (error: any) {
       toast.error(error.response.data.message);
       dispatch(fetchDataFailure(error.response.data.error));
@@ -176,9 +178,46 @@ export const approveEmployees = createAsyncThunk(
   async (id: string, { dispatch }) => {
     try {
       dispatch(fetchDataStart);
-      const response = await apiPost(`/company/approve-employees${id}`, {});
+      const response = await apiPost(`/company/approve-employees/${id}`, {});
       toast.success(response.data.message);
       dispatch(getEmployees({ approvalStatus: "approved" }))
+      dispatch(getCompanyDetails())
+    } catch (error: any) {
+      console.log(error.response.data.error);
+      toast.error(error.response.data.Error);
+      dispatch(fetchDataFailure(error.response.data.error));
+    }
+  }
+);
+
+/**==============Reject Employees======= **/
+export const rejectEmployees = createAsyncThunk(
+  "rejectEmployees",
+  async (id: string, { dispatch }) => {
+    try {
+      dispatch(fetchDataStart);
+      const response = await apiPost(`/company/reject-employees/${id}`, {});
+      toast.success(response.data.message);
+      dispatch(getEmployees({ approvalStatus: "approved" }))
+      dispatch(getCompanyDetails())
+    } catch (error: any) {
+      console.log(error.response.data.error);
+      toast.error(error.response.data.Error);
+      dispatch(fetchDataFailure(error.response.data.error));
+    }
+  }
+);
+
+/**==============Get Company Details======= **/
+export const getCompanyDetails = createAsyncThunk(
+  "getCompanyDetails",
+  async (_, { dispatch }) => {
+    try {
+      const authcompanyId = await localStorage.getItem("authcompanyId")
+      dispatch(fetchDataStart);
+      const response = await apiPost(`/company/company-profile`, { companyId: authcompanyId});
+      console.log('response', response);
+      dispatch(fetchCompanyDataSuccess(response.data.data));
     } catch (error: any) {
       console.log(error.response.data.error);
       toast.error(error.response.data.Error);

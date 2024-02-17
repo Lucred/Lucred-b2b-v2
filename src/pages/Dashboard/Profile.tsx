@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import profille from '../../assets/profille.png'
 import { SelectInput, TextInput } from './DashboardAddProduct'
 import { useEffect, useRef, useState } from 'react'
-import { updateLogo } from '../../redux/actions'
+import { getCompanyDetails, updateLogo } from '../../redux/actions'
 import { useDispatch, useSelector } from 'react-redux'
 
 const Profile = () => {
@@ -12,7 +12,11 @@ const Profile = () => {
     const logo = localStorage.getItem("logo")
     const dispatch = useDispatch() as unknown as any
 
-    const company = useSelector((state: any) => state.data)?.companyData
+    const company = useSelector((state: any) => state.companyProfile)
+
+    useEffect(() => {
+        dispatch(getCompanyDetails())
+    }, [])
 
 
     return (
