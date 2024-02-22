@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { LoginData } from "../interface";
 import { FormDataPost, apiDelete, apiGet, apiPatch, apiPost, apiPut, formDataPut } from "../utils/axios";
-import { fetchDataFailure, fetchDataStart, fetchDataSuccess, fetchDataUser, fetchEmployees, fetchTransactions, fetchSingleEmployee, fetchCompanyDataSuccess } from "./reducer";
+import { fetchDataFailure, fetchDataStart, fetchDataSuccess, fetchDataUser, fetchEmployees, fetchTransactions, fetchSingleEmployee, fetchCompanyDataSuccess, fetchPendingEmployees } from "./reducer";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -76,7 +76,11 @@ export const getEmployees = createAsyncThunk(
       dispatch(fetchDataStart);
       const response = await apiPost("/company/get-employees", formData ? formData : '');
       // console.log('response.data', response.data);
-      dispatch(fetchEmployees(response.data.data));
+      if (formData.approvalStatus === "pending") {
+        dispatch(fetchPendingEmployees(response.data.data));
+      } else {
+        dispatch(fetchEmployees(response.data.data));
+      }
     } catch (error: any) {
       console.log(error.response.data.error);
       toast.error(error.response.data.Error);
@@ -215,7 +219,7 @@ export const getCompanyDetails = createAsyncThunk(
     try {
       const authcompanyId = await localStorage.getItem("authcompanyId")
       dispatch(fetchDataStart);
-      const response = await apiPost(`/company/company-profile`, { companyId: authcompanyId});
+      const response = await apiPost(`/company/company-profile`, { companyId: authcompanyId });
       console.log('response', response);
       dispatch(fetchCompanyDataSuccess(response.data.data));
     } catch (error: any) {
@@ -250,10 +254,43 @@ export const getSingleEmployee = createAsyncThunk(
       dispatch(fetchDataStart);
       const response = await apiGet(`/company/employee-profile/${id}`);
       console.log(response.data)
-      dispatch(fetchSingleEmployee(response.data));
+      dispatch(fetchSingleEmployee(response.data.data));
     } catch (error: any) {
       console.log(error.response.data.error);
       toast.error(error.response.data.Error);
+      dispatch(fetchDataFailure(error.response.data.error));
+    }
+  }
+);
+/**==============Get Employee Transactions======= **/
+export const deleteSingleEmployee = createAsyncThunk(
+  "deleteSingleEmployee",
+  async (id: string, { dispatch }) => {
+    try {
+      dispatch(fetchDataStart);
+      const response = await apiDelete(`/company/remove-employee/${id}`);
+      console.log(response.data)
+      dispatch(getEmployees({ approvalStatus: "approved" }))
+    } catch (error: any) {
+      console.log(error.response.data.error);
+      toast.error(error.response.data.Error);
+      dispatch(fetchDataFailure(error.response.data.error));
+    }
+  }
+);
+
+
+/**==============Approve Credit=======  **/
+export const approveCredit = createAsyncThunk(
+  "approveCredit",
+  async (formData: any, { dispatch }) => {
+    try {
+      dispatch(fetchDataStart);
+      const response = await apiPost(`/company/approve-credit`, formData);
+      toast.success(response.data.data.message ? response.data.data.message : response.data.message);
+      dispatch(getEmployees({ approvalStatus: "approved" }))
+    } catch (error: any) {
+      toast.error(error.response.data.message);
       dispatch(fetchDataFailure(error.response.data.error));
     }
   }

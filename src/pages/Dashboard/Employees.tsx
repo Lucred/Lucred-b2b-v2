@@ -10,19 +10,40 @@ import img4 from '../../assets/img4.png'
 import phone from '../../assets/phone.png'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { useEffect } from 'react'
-import { deleteProduct, getEmployees } from '../../redux/actions'
+import { useEffect, useState } from 'react'
+import { deleteProduct, deleteSingleEmployee, getEmployees } from '../../redux/actions'
 
 const Employees = () => {
     const dispatch = useDispatch() as unknown as any
     const navigate = useNavigate()
     const id = localStorage.getItem("companyId") as unknown as string
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [currentId, setcurrentId] = useState("");
+
+    const handleButtonClick = () => {
+        setShowConfirmation(true);
+    };
+
+    const handleConfirm = async () => {
+        await dispatch(deleteSingleEmployee(currentId))
+        setShowConfirmation(false);
+    };
+
+    const handleCancel = () => {
+        setShowConfirmation(false);
+    };
 
     const employees = useSelector((state: any) => state.employees)
     console.log('employees', employees);
 
+    const deleteEmployee = (id: string) => {
+        setcurrentId(id)
+        handleButtonClick()
+    }
+
     useEffect(() => {
         dispatch(getEmployees({ approvalStatus: "approved" }))
+        dispatch(getEmployees({ approvalStatus: "pending" }))
     }, [])
     return (
         <div className={`${window.innerWidth > 768 ? `ml-[15%]` : `ml-[8%]`} bg-[#1100770A]min-h-[100vh] `}>
@@ -67,7 +88,11 @@ const Employees = () => {
                                         <td className='font-[400]'>₦{elem.workData?.[0]?.workSalary}</td>
                                         <td className='font-[400]'>{elem.phoneNumber}</td>
                                         <td className='font-[400]'>{elem.workData?.[0]?.employmentStatus}</td>
-                                        <td className='font-[400]  '><div className='flex items-center justify-center mx-[2px] text-[#32C38F] cursor-pointer' onClick={() => navigate(`/dashboard/employees/${elem.id}`)} >View </div> </td>
+                                        <td className='font-[400] flex justify-center items-center h-[12vh]'>
+                                            <div className='mx-[2px] text-[#32C38F] cursor-pointer' onClick={() => navigate(`/dashboard/employees/${elem.id}`)} ><img src={view} alt='view' /> </div>
+                                            <div className='mx-[2px] text-[#32C38F] cursor-pointer' onClick={() => navigate(`/dashboard/issue-credit/${elem.id}`)} ><img src={edit} alt='edit' /> </div>
+                                            <div className='mx-[2px] text-[#32C38F] cursor-pointer' onClick={() => deleteEmployee(elem.id)} ><img src={trash} alt='trash' /> </div>
+                                        </td>
 
                                     </tr>))}
 
@@ -79,7 +104,17 @@ const Employees = () => {
                 </div>
 
 
-
+                {showConfirmation && (
+                    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 border border-gray-300 shadow-md z-50">
+                        <p className="mb-4">Are you sure you want to proceed?</p>
+                        <button onClick={handleConfirm} className="bg-green-500 text-white px-4 mr-3 py-2 rounded">
+                            Yes
+                        </button>
+                        <button onClick={handleCancel} className="bg-red-500 text-white px-4 py-2 rounded">
+                            No
+                        </button>
+                    </div>
+                )}
 
             </div>
 

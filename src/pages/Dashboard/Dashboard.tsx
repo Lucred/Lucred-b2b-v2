@@ -9,6 +9,7 @@ import UserReport from './UserReport'
 import Settings from './Settings'
 import SingleEmployee from './SingleEmployee'
 import PendingApproval from './PendingApproval'
+import IssueCredit from './IssueCredit'
 
 const Dashboard = () => {
   
@@ -27,6 +28,7 @@ const Dashboard = () => {
             <Route path="/pending-approvals" element={<PendingApproval />} />
             <Route path="/employees/:employeeId" element={<SingleEmployee />} />
             <Route path="/add-employee" element={<DashboardAddProduct />} />
+            <Route path="/issue-credit/:employeeId" element={<IssueCredit />} />
             <Route path="/update-employee/:employeeId" element={<DashboardAddProduct />} />
             <Route path="/transaction" element={<Transactions />} />
             <Route path="/profile" element={<Profile />} />

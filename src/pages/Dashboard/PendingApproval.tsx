@@ -14,7 +14,7 @@ const PendingApproval = () => {
     const [loadingApprove, setloadingApprove] = useState<boolean>(false)
     const [loadingReject, setloadingReject] = useState<boolean>(false)
 
-    const employees = useSelector((state: any) => state.employees)
+    const employees = useSelector((state: any) => state.pendingemployees)
     console.log('employees', employees);
 
     const handleViewEmployeeData = (item: string) => {
@@ -100,10 +100,6 @@ const PendingApproval = () => {
                                     <div className='my-[3%]'>
                                         <div className='text-[0.9rem] font-[400] pb-[2px]'>Official Email:</div>
                                         <div className='text-[0.9rem] font-[400] text-[#110077]'>{currentEmployee.workData?.[0]?.employeeEmailAddress}</div>
-                                    </div>
-                                    <div className='my-[3%]'>
-                                        <div className='text-[0.9rem] font-[400] pb-[2px]'>Gender:</div>
-                                        <div className='text-[0.9rem] font-[400] text-[#110077]'>{currentEmployee.name}</div>
                                     </div>
                                     <div className='my-[3%]'>
                                         <div className='text-[0.9rem] font-[400] pb-[2px]'>Phone Number:</div>

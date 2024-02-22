@@ -49,6 +49,8 @@ const Profile = () => {
                     <TextInput label='Country' value={company?.country} readonly={true} />
                     <TextInput label='City' value={company?.city} readonly={true} />
                     <TextInput label='Address' value={company?.address} readonly={true} />
+                    <TextInput label='Company Id' value={company?.companyId} readonly={true} />
+                    <TextInput label='Last Updated' value={new Date(company?.updatedAt)} readonly={true} />
                 </div>
                 <div className='flex justify-end'>
                     <Link to="/dashboard/settings" className='bg-[#533AE9] w-[50%] lg:w-[10%] h-[5vh] text-[#fff] rounded-md flex justify-center items-center'>Edit</Link>
