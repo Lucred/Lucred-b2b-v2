@@ -28,11 +28,10 @@ const Login = () => {
     const handleSubmit = async (e: any) => {
         setLoading(true)
         e.preventDefault()
-        console.log("Form submitted", formData)
         await dispatch(loginUser(formData))
+        navigate('/dashboard');
         await dispatch(getDashboardInfo())
         await dispatch(getEmployeeTransactions())
-        navigate('/dashboard');
         setLoading(false)
     }
 

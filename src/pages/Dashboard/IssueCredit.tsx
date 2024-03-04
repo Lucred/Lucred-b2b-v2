@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { approveCredit, approveEmployees, deleteProduct, getEmployees, getSingleEmployee } from '../../redux/actions'
 import { SelectInput, TextInput } from './DashboardAddProduct'
+import { formatAmount } from '../../utils/serviceUtils'
 
 const IssueCredit = () => {
     const dispatch = useDispatch() as unknown as any
@@ -152,26 +153,26 @@ const IssueCredit = () => {
                                     <div className='flex justify-center'>
                                         <div className='my-[3%] mr-6 w-[50%]'>
                                             <div className='text-[0.9rem] font-[400] pb-[2px]'>You will pay</div>
-                                            <div className='text-[0.9rem] font-[400] text-[#110077]'>₦{((+compoundInterest + +formData.amount) / formData.duration).toFixed(2)}</div>
+                                            <div className='text-[0.9rem] font-[400] text-[#110077]'>₦{formatAmount(((+compoundInterest + +formData.amount) / formData.duration).toFixed(2))}</div>
                                             <div className='text-[0.9rem] font-[400] text-[#C3C3C4]'>Per Month</div>
                                         </div>
                                         <div className='my-[3%] w-[50%]'>
                                             <div className='text-[0.9rem] font-[400] pb-[2px]'>Due Date</div>
-                                            <div className='text-[0.9rem] font-[400] text-[#C3C3C4]'>{findDueDate()}</div>
+                                            <div className='text-[0.9rem] font-[400] text-[#110077]'>{findDueDate()}</div>
                                         </div>
                                     </div>
                                     <div className='flex justify-center'>
                                         <div className='my-[3%] mr-6 w-[50%]'>
                                             <div className='text-[0.9rem] font-[400] pb-[2px]'>Loan</div>
-                                            <div className='text-[0.9rem] font-[400] text-[#C3C3C4]'>₦{formData.amount}</div>
+                                            <div className='text-[0.9rem] font-[400] text-[#110077]'>₦{formatAmount(formData.amount)}</div>
                                         </div>
                                         <div className='my-[3%] mr-6 w-[50%]'>
                                             <div className='text-[0.9rem] font-[400] pb-[2px]'>Return</div>
-                                            <div className='text-[0.9rem] font-[400] text-[#C3C3C4]'>₦{(+compoundInterest + +formData.amount).toFixed(2)}</div>
+                                            <div className='text-[0.9rem] font-[400] text-[#110077]'>₦{formatAmount((+compoundInterest + +formData.amount).toFixed(2))}</div>
                                         </div>
                                         <div className='my-[3%] mr-6 w-[50%]'>
                                             <div className='text-[0.9rem] font-[400] pb-[2px]'>Interest</div>
-                                            <div className='text-[0.9rem] font-[400] text-[#C3C3C4]'>₦{compoundInterest}</div>
+                                            <div className='text-[0.9rem] font-[400] text-[#110077]'>₦{formatAmount(compoundInterest)}</div>
                                         </div>
                                     </div>
                                     <div className='my-[7%] flex justify-center'>
@@ -215,7 +216,7 @@ const IssueCredit = () => {
                                     </div>
                                     <div className='my-[3%]'>
                                         <div className='text-[0.9rem] font-[400] pb-[2px]'>Total Amount Of Credit Collected:</div>
-                                        <div className='text-[0.9rem] font-[400] text-[#110077]'>₦{currentEmployee.collectedCredit}</div>
+                                        <div className='text-[0.9rem] font-[400] text-[#110077]'>₦{formatAmount(currentEmployee.collectedCredit)}</div>
                                     </div>
                                 </div>
                             </div>
