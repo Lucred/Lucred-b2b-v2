@@ -12,11 +12,13 @@ import img4 from '../../assets/img4.png'
 import { useEffect, useState } from "react"
 import { getEmployeeTransactions, withdraw } from "../../redux/actions"
 import { useDispatch, useSelector } from "react-redux"
+import { formatAmount } from "../../utils/serviceUtils"
 
 const Transactions = () => {
     const location = useLocation()
 
     const [showModal, setShowModal] = useState(false)
+    const [currentDate, setcurrentDate] = useState(null)
     const toggleModal = () => {
         setShowModal(!showModal)
     }
@@ -82,6 +84,19 @@ const Transactions = () => {
         dispatch(getEmployeeTransactions())
     }, [])
 
+    // useEffect(() => {
+    //     const currentDate = new Date();
+
+    //     const options = {
+    //         year: 'numeric',
+    //         month: 'long',
+    //         day: 'numeric'
+    //     };
+
+    //     const formattedDate = currentDate.toLocaleDateString('en-US', options);
+    // }, [])
+
+
     return (
         <div className={`${window.innerWidth > 768 ? `ml-[15%]` : `ml-[10%]`} bg-[#1100770A]min-h-[100vh] `}>
             <div className='mx-[3%]'>
@@ -93,15 +108,15 @@ const Transactions = () => {
                     <div className='flex items-center justify-start my-[2%]'>
                         <div className="px-[8%] py-[4%] bg-[#110077] text-[#fff] border rounded-xl mr-[2%]">
                             <div className="font-[400] text-[1.2rem]">Total Credit</div>
-                            <div className="font-[700] text-[1.2rem] pt-[1%]">NGN {transactions.totalCredit}</div>
+                            <div className="font-[700] text-[1.2rem] pt-[1%]">NGN {formatAmount(transactions.totalCredit)}</div>
                         </div>
                         <div className="px-[8%] py-[4%] bg-[#32C38F] text-[#fff] border rounded-xl mr-[2%]">
                             <div className="font-[400] text-[1.2rem]">Active Credit</div>
-                            <div className="font-[700] text-[1.2rem] pt-[1%]">NGN {transactions.totalActiveCredit}</div>
+                            <div className="font-[700] text-[1.2rem] pt-[1%]">NGN {formatAmount(transactions.totalActiveCredit)}</div>
                         </div>
                         <div className="px-[8%] py-[4%] bg-[#D72D2DB2] text-[#fff] border rounded-xl">
                             <div className="font-[400] text-[1.2rem]">Due Payment</div>
-                            <div className="font-[700] text-[1.2rem] pt-[1%]">NGN {transactions.totalDuePayment}</div>
+                            <div className="font-[700] text-[1.2rem] pt-[1%]">NGN {formatAmount(transactions.totalDuePayment)}</div>
                         </div>
                     </div>
                 </div>
@@ -114,7 +129,7 @@ const Transactions = () => {
                         placeholder="Search"
                         className="border-none h-[5vh] pl-[5%] pr-[5%] bg-[#F5F5FA] text-[#707070] outline-none text-[0.8rem]"
                     >
-                        <option>Today (March 18, 2022)</option>
+                        <option>Today ({new Date().toLocaleDateString()})</option>
                     </select>
                 </div>
                 <div className="w-[100%] overflow-scroll">
@@ -132,7 +147,7 @@ const Transactions = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {transactions?.employeesData?.map((elem: any, id: number) => (
+                            {transactions?.allEmployeesData?.map((elem: any, id: number) => (
                                 <tr key={id} className='bg-[#FFFFFF] text-[0.8rem] text-[#171515] text-center w-[100%] h-[10vh] '>
                                     <td className='font-[400] flex justify-center items-center h-[10vh]'><img src={elem.coverImage} alt="" className='h-[50px]' /></td>
                                     <td className='font-[400]'>{elem.name}</td>

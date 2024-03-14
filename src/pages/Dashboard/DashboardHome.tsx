@@ -237,9 +237,9 @@ const TopTransactions = (transactions: any) => {
             </tr>
           </thead>
           <tbody>
-            {transactions?.transactions?.employeesData?.map((elem: any, id: number) => (
+            {transactions?.transactions?.allEmployeesData?.map((elem: any, id: number) => (
               <tr key={id} className='bg-[#FFFFFF] text-[0.8rem] text-[#171515] text-center w-[100%] h-[10vh] '>
-                <td className='font-[400] flex justify-center items-center h-[10vh]'><img src={elem.coverImage} alt="" className='h-[50px]' /></td>
+                <td className='font-[400] flex justify-center items-center'><img src={elem.coverImage} alt="" className='h-[50px]' /></td>
                 <td className='font-[400]'>{elem.name}</td>
                 <td className='font-[400]'>{elem.workData?.[0]?.jobTitle}</td>
                 <td className='font-[400]'>₦{elem.currentCredit}</td>
