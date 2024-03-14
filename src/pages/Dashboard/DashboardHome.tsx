@@ -227,7 +227,7 @@ const TransactionTable = (company: any) => {
 const TopTransactions = (transactions: any) => {
   const navigate = useNavigate()
   return (
-    <div className="bg-[#fff] w-[100%]  py-[3%] px-[4%] my-[2%] rounded-md">
+    <div className="bg-[#fff] w-[100%] py-[3%] px-[4%] my-[2%] rounded-md">
       <div className="pb-[2%]">
         <h3 className="text-[#000000] font-[500] text-[1.2rem] mb-[4px]">Top Transactions</h3>
       </div>
@@ -245,7 +245,7 @@ const TopTransactions = (transactions: any) => {
           </thead>
           <tbody>
             {transactions?.transactions?.allEmployeesData?.map((elem: any, id: number) => (
-              <tr key={id} className='bg-[#FFFFFF] text-[0.8rem] text-[#171515] text-center w-[100%] h-[10vh] '>
+              <tr key={id} className='bg-[#FFFFFF] text-[0.8rem] text-[#171515] text-center w-[100%]'>
                 <td className='font-[400] flex justify-center items-center'><img src={elem.coverImage} alt="" className='h-[50px]' /></td>
                 <td className='font-[400]'>{elem.name}</td>
                 <td className='font-[400]'>{elem.workData?.[0]?.jobTitle}</td>
