@@ -8,11 +8,13 @@ import transaction from "../../assets/transaction.png";
 import customer from "../../assets/customer.png";
 import Help from "./Help";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { truncateString } from "../../utils/serviceUtils";
+import { getDashboardInfo, getEmployeeTransactions } from "../../redux/actions";
 
 const DashboardHome = () => {
   const [showHelp, setShowHelp] = useState(false)
+  const dispatch = useDispatch() as unknown as any
 
   const company = useSelector((state: any) => state.company)
   const transactions = useSelector((state: any) => state.transactions)
@@ -65,6 +67,11 @@ const DashboardHome = () => {
   //     }
   //   ]
   // }
+
+  useEffect(() => {
+    dispatch(getDashboardInfo())
+    dispatch(getEmployeeTransactions())
+  }, [])
 
   return (
     <div className={`${window.innerWidth > 768 ? `ml-[15%]` : `ml-[10%]`} bg-[#1100770A] lg:h-[100vh]  `}>

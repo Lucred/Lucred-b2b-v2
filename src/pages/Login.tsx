@@ -30,8 +30,8 @@ const Login = () => {
         e.preventDefault()
         await dispatch(loginUser(formData))
         navigate('/dashboard');
-        await dispatch(getDashboardInfo())
-        await dispatch(getEmployeeTransactions())
+        dispatch(getDashboardInfo())
+        dispatch(getEmployeeTransactions())
         setLoading(false)
     }
 
