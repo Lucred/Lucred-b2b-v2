@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom"
+import { Link, useLocation, useNavigate } from "react-router-dom"
 import { SelectInput } from "./DashboardAddProduct"
 import { AnalyticCard } from "./DashboardHome"
 import phone from "../../assets/phone.png"
@@ -16,6 +16,7 @@ import { formatAmount } from "../../utils/serviceUtils"
 
 const Transactions = () => {
     const location = useLocation()
+    const navigate = useNavigate()
 
     const [showModal, setShowModal] = useState(false)
     const [currentDate, setcurrentDate] = useState(null)
@@ -24,56 +25,6 @@ const Transactions = () => {
     }
 
     const transactions = useSelector((state: any) => state.transactions)
-    // const transactions = {
-    //     totalCredit: 50000,
-    //     totalActiveCredit: 50000,
-    //     totalDuePayment: 0,
-    //     employeesData: [
-    //         {
-    //             userId: "658778e9b97e43b88224744b",
-    //             name: "solomon aboki",
-    //             email: "lotrigogeff@gmail.com",
-    //             phoneNumber: "+2349138174761",
-    //             workData: [
-    //                 {
-    //                     companyName: "Adeboye Group",
-    //                     jobTitle: "Software Developer",
-    //                     employmentStatus: "Full time",
-    //                     employeeEmailAddress: "boye@adeboyeboye.com",
-    //                     isWorkDataVerified: true,
-    //                     workSalary: "400,000",
-    //                     proofOfWork: "https://firebasestorage.googleapis.com/v0/b/lucred-715bc.appspot.com/o/company%2Fhair%20salon.jpeg?alt=media&token=af836869-cb16-4a9a-87d2-ad80d280632d",
-    //                     company: {
-    //                         _id: "65a542fe79a8ab83d00c217a",
-    //                         name: "Adeboye Group",
-    //                         address: "Ogunrinde Str Lagos",
-    //                         emailAddress: "adeboyesamueladeyemi@adeboyegroup.com",
-    //                         totalEmployees: 50,
-    //                         cacNumber: "2e3rr4e3",
-    //                         companyId: "#d78217",
-    //                         phoneNumber: "+2348134488510",
-    //                         city: "Ikeja",
-    //                         country: "Canada",
-    //                         logo: "https://firebasestorage.googleapis.com/v0/b/lucred-715bc.appspot.com/o/company%2FbarbingImg.jpeg?alt=media&token=ae342462-a6bc-4adf-b15d-da9d7b61e1ed",
-    //                         isCompanyActive: false,
-    //                         totalHR: 5,
-    //                         createdBy: "6358667bcf19ce096fb7545f",
-    //                         createdAt: "2024-01-15T14:36:46.124Z",
-    //                         updatedAt: "2024-01-30T17:31:33.562Z",
-    //                         __v: 0,
-    //                         payDay: 29
-    //                     },
-    //                     _id: "65a547a879a8ab83d00c2192"
-    //                 }
-    //             ],
-    //             currentCredit: 50000,
-    //             totalCredit: 50000,
-    //             status: "Active",
-    //             date: "2024-01-29T00:00:00.000Z"
-    //         }
-    //     ]
-    // }
-
 
     const dispatch = useDispatch() as unknown as any
 
@@ -83,19 +34,6 @@ const Transactions = () => {
     useEffect(() => {
         dispatch(getEmployeeTransactions())
     }, [])
-
-    // useEffect(() => {
-    //     const currentDate = new Date();
-
-    //     const options = {
-    //         year: 'numeric',
-    //         month: 'long',
-    //         day: 'numeric'
-    //     };
-
-    //     const formattedDate = currentDate.toLocaleDateString('en-US', options);
-    // }, [])
-
 
     return (
         <div className={`${window.innerWidth > 768 ? `ml-[15%]` : `ml-[10%]`} bg-[#1100770A]min-h-[100vh] `}>
@@ -108,15 +46,15 @@ const Transactions = () => {
                     <div className='flex items-center justify-start my-[2%]'>
                         <div className="px-[8%] py-[4%] bg-[#110077] text-[#fff] border rounded-xl mr-[2%]">
                             <div className="font-[400] text-[1.2rem]">Total Credit</div>
-                            <div className="font-[700] text-[1.2rem] pt-[1%]">NGN {formatAmount(transactions.totalCredit)}</div>
+                            <div className="font-[700] text-[1.2rem] pt-[1%]">{formatAmount(transactions.totalCredit)}</div>
                         </div>
                         <div className="px-[8%] py-[4%] bg-[#32C38F] text-[#fff] border rounded-xl mr-[2%]">
                             <div className="font-[400] text-[1.2rem]">Active Credit</div>
-                            <div className="font-[700] text-[1.2rem] pt-[1%]">NGN {formatAmount(transactions.totalActiveCredit)}</div>
+                            <div className="font-[700] text-[1.2rem] pt-[1%]">{formatAmount(transactions.totalActiveCredit)}</div>
                         </div>
                         <div className="px-[8%] py-[4%] bg-[#D72D2DB2] text-[#fff] border rounded-xl">
                             <div className="font-[400] text-[1.2rem]">Due Payment</div>
-                            <div className="font-[700] text-[1.2rem] pt-[1%]">NGN {formatAmount(transactions.totalDuePayment)}</div>
+                            <div className="font-[700] text-[1.2rem] pt-[1%]">{formatAmount(transactions.totalDuePayment)}</div>
                         </div>
                     </div>
                 </div>
@@ -144,6 +82,7 @@ const Transactions = () => {
                                 <th className='font-[500]'>Current Credit</th>
                                 <th className='font-[500]'>Total Credit</th>
                                 <th className='font-[500]'>Status</th>
+                                <th className='font-[500]'>Action</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -157,6 +96,7 @@ const Transactions = () => {
                                     <td className='font-[400]'>₦{elem.currentCredit}</td>
                                     <td className='font-[400]'>₦{elem.totalCredit}</td>
                                     <td className={`${elem.status === 'Active' ? 'text-[#32C38F]' : 'text-[#D72D2D]'} font-[400]`}>{elem.status}</td>
+                                    <td className='font-[400] text-[#110077] cursor-pointer' onClick={() => navigate(`/dashboard/transaction/${elem.userId}`)}> View </td>
                                 </tr>))}
                         </tbody>
                     </table>

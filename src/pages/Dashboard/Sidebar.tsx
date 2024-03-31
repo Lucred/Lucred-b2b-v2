@@ -30,10 +30,10 @@ export const MaxSidebar = () => {
                 <li><Link to={'/dashboard/employees'} className='text-[#fff] flex pl-[5%] items-center '><img src={employees} alt="" className='h-[2vh] mr-[5%]' />Employees</Link></li>
                 {/* <li><Link to={''} className='text-[#fff] flex pl-[5%] items-center '><img src={statistics} alt="" className='h-[2vh] mr-[5%]' />Statistics</Link></li> */}
                 <li><Link to={'/dashboard/transaction'} className='text-[#fff] flex pl-[5%] items-center '><img src={transaction} alt="" className='h-[2vh] mr-[5%]' />Transaction</Link></li>
-                <li><Link to={'/dashboard/user-guide'} className='text-[#fff] flex pl-[5%] items-center '><img src={userGuide} alt="" className='h-[auto] mr-[5%]' />User Guide</Link></li>
+                {/* <li><Link to={'/dashboard/user-guide'} className='text-[#fff] flex pl-[5%] items-center '><img src={userGuide} alt="" className='h-[auto] mr-[5%]' />User Guide</Link></li> */}
                 <li><Link to={'/dashboard/profile'} className='text-[#fff] flex pl-[5%] items-center '><img src={profile} alt="" className='h-[2vh] mr-[5%]' />Profile</Link></li>
                 <li><Link to={'/dashboard/settings'} className='text-[#fff] flex pl-[5%] items-center '><img src={settings} alt="" className='h-[2vh] mr-[5%]' />Settings</Link></li>
-                <li><Link to={''} className='text-[#fff] flex pl-[5%] items-center '><img src={help} alt="" className='h-[2vh] mr-[5%]' />Help</Link></li>
+                {/* <li><Link to={''} className='text-[#fff] flex pl-[5%] items-center '><img src={help} alt="" className='h-[2vh] mr-[5%]' />Help</Link></li> */}
                 <li><Link to={''} className='text-[#fff] flex pl-[5%] items-center ' onClick={Logout}><img src={logout} alt="" className='h-[2vh] mr-[5%]' />Logout</Link></li>
             </ul>
 
@@ -85,10 +85,10 @@ export const MinSidebar2 = ({ click }: any) => {
                 <li><Link to={'/dashboard/employees'} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={employees} alt="" className='h-[2vh] mr-[5%]' />Employees</Link></li>
                 <li><Link to={'/dashboard/statistics'} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={statistics} alt="" className='h-[2vh] mr-[5%]' />Statistics</Link></li>
                 <li><Link to={'/dashboard/transaction'} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={transaction} alt="" className='h-[2vh] mr-[5%]' />Transaction</Link></li>
-                <li><Link to={'/dashboard/user-guide'} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={userGuide} alt="" className='h-[auto] mr-[5%]' />User Guide</Link></li>
+                {/* <li><Link to={'/dashboard/user-guide'} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={userGuide} alt="" className='h-[auto] mr-[5%]' />User Guide</Link></li> */}
                 <li><Link to={'/dashboard/profile'} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={profile} alt="" className='h-[2vh] mr-[5%]' />Profile</Link></li>
                 <li><Link to={'/dashboard/settings'} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={settings} alt="" className='h-[2vh] mr-[5%]' />Settings</Link></li>
-                <li><Link to={''} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={help} alt="" className='h-[2vh] mr-[5%]' />Help</Link></li>
+                {/* <li><Link to={''} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={help} alt="" className='h-[2vh] mr-[5%]' />Help</Link></li> */}
                 <li><Link to={''} className='text-[#fff] flex pl-[5%] items-center ' onClick={Logout}><img src={logout} alt="" className='h-[2vh] mr-[5%]' />Logout</Link></li>
             </ul>
 

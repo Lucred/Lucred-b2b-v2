@@ -20,5 +20,24 @@ export const formatAmount = (amount: number | string | null, decimalPlaces: numb
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 
     // Combine the parts back together
-    return parts.join('.');
+    return "₦" + parts.join('.');
 };
+
+export const formatDate = (dateString: string, format: string): string => {
+    const date = new Date(dateString);
+
+    const options: Intl.DateTimeFormatOptions = {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+        second: 'numeric',
+        timeZoneName: 'short'
+    };
+
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+
+    return formattedDate;
+};
+

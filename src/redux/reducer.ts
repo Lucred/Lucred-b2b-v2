@@ -8,6 +8,7 @@ export interface State {
   companyProfile: any[];
   singleEmployee: any;
   transactions:any[];
+  singleEmployeetransactions:any;
   loading: boolean;
   error: string | null;
 }
@@ -20,6 +21,7 @@ const initialState: State = {
   companyProfile: [],
   singleEmployee: {},
   transactions:[],
+  singleEmployeetransactions:{},
   loading: false,
   error: null,
 };
@@ -60,6 +62,10 @@ const dataSlice = createSlice({
       state.loading = false;
       state.transactions = action.payload;
     },
+    fetchSingleEmployeeTransaction : (state, action: PayloadAction<any[]>) => {
+      state.loading = false;
+      state.singleEmployeetransactions = action.payload;
+    },
     fetchDataFailure: (state, action: PayloadAction<string>) => {
       state.loading = false;
       state.error = action.payload;
@@ -67,6 +73,6 @@ const dataSlice = createSlice({
   },
 });
 
-export const { fetchDataStart, fetchCompanyDataSuccess, fetchDataSuccess, fetchEmployees, fetchPendingEmployees, fetchDataUser, fetchSingleEmployee, fetchDataFailure, fetchTransactions} = dataSlice.actions;
+export const { fetchDataStart, fetchCompanyDataSuccess, fetchDataSuccess, fetchEmployees, fetchPendingEmployees, fetchDataUser, fetchSingleEmployee, fetchDataFailure, fetchTransactions, fetchSingleEmployeeTransaction} = dataSlice.actions;
 
 export default dataSlice.reducer;

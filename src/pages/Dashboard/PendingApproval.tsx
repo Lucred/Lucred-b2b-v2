@@ -21,13 +21,21 @@ const PendingApproval = () => {
         setcurrentEmployee(item)
     }
 
-    const handleApproveEmployee = async (id: string) => {
-        await dispatch(approveEmployees(id))
+    const handleApproveEmployee = async (employeeId: string, workProfileId: string) => {
+        const formData = {
+            workProfileId,
+            employeeId
+        }
+        await dispatch(approveEmployees(formData))
         navigate(-1)
     }
 
-    const handleRejectEmployee = async (id: string) => {
-        await dispatch(approveEmployees(id))
+    const handleRejectEmployee = async (employeeId: string, workProfileId: string) => {
+        const formData = {
+            workProfileId,
+            employeeId
+        }
+        await dispatch(approveEmployees(formData))
         navigate(-1)
     }
 
@@ -118,8 +126,8 @@ const PendingApproval = () => {
                                         <a href={currentEmployee.workData?.[0]?.proofOfWork} target='_blank' className='text-[0.9rem] font-[400] text-[#110077]'>{currentEmployee.workData?.[0]?.proofOfWork}</a>
                                     </div>
                                     <div className='my-[7%] flex justify-center'>
-                                        <button className='text-[#533AE9] w-[auto] min-w-[160px] rounded-md bg-[#ffffff] border border-[1px] px-[10px] border-[#11007766] lg:mr-[5%] rounded-md flex justify-center items-center' onClick={() => handleRejectEmployee(currentEmployee.id)}>Reject</button>
-                                        <button className='text-[#ffffff] w-[auto] min-w-[160px] rounded-md bg-[#533AE9] px-[10px] lg:mr-[5%] rounded-md flex justify-center items-center' onClick={() => handleApproveEmployee(currentEmployee.id)}>Accept</button>
+                                        <button className='text-[#533AE9] w-[auto] min-w-[160px] rounded-md bg-[#ffffff] border border-[1px] px-[10px] border-[#11007766] lg:mr-[5%] rounded-md flex justify-center items-center' onClick={() => handleRejectEmployee(currentEmployee.id, currentEmployee.workData?.[0]?._id)}>Reject</button>
+                                        <button className='text-[#ffffff] w-[auto] min-w-[160px] rounded-md bg-[#533AE9] px-[10px] lg:mr-[5%] rounded-md flex justify-center items-center' onClick={() => handleApproveEmployee(currentEmployee.id, currentEmployee.workData?.[0]?._id)}>Accept</button>
                                     </div>
                                 </div>
                             </div>

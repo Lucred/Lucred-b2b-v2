@@ -12,7 +12,7 @@ import { SelectInput, TextAreaInput, TextInput } from "./DashboardAddProduct";
 const SingleEmployee = () => {
   const dispatch = useDispatch() as unknown as any
 
-  const singleEmployee = useSelector((state: any) => state.singleEmployee)?.data
+  const singleEmployee = useSelector((state: any) => state.singleEmployee)  
 
   const { employeeId } = useParams()
 

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { LoginData } from "../interface";
 import { FormDataPost, apiDelete, apiGet, apiPatch, apiPost, apiPut, formDataPut } from "../utils/axios";
-import { fetchDataFailure, fetchDataStart, fetchDataSuccess, fetchDataUser, fetchEmployees, fetchTransactions, fetchSingleEmployee, fetchCompanyDataSuccess, fetchPendingEmployees } from "./reducer";
+import { fetchDataFailure, fetchDataStart, fetchDataSuccess, fetchDataUser, fetchEmployees, fetchTransactions, fetchSingleEmployee, fetchCompanyDataSuccess, fetchPendingEmployees, fetchSingleEmployeeTransaction } from "./reducer";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -179,10 +179,10 @@ export const withdraw = createAsyncThunk(
 /**==============Approve Employees======= **/
 export const approveEmployees = createAsyncThunk(
   "approveEmployees",
-  async (id: string, { dispatch }) => {
+  async (formData: any, { dispatch }) => {
     try {
       dispatch(fetchDataStart);
-      const response = await apiPost(`/company/approve-employees/${id}`, {});
+      const response = await apiPost(`/company/approve-employees/`, formData);
       toast.success(response.data.message);
       dispatch(getEmployees({ approvalStatus: "approved" }))
       dispatch(getCompanyDetails())
@@ -197,10 +197,10 @@ export const approveEmployees = createAsyncThunk(
 /**==============Reject Employees======= **/
 export const rejectEmployees = createAsyncThunk(
   "rejectEmployees",
-  async (id: string, { dispatch }) => {
+  async (formData: any, { dispatch }) => {
     try {
       dispatch(fetchDataStart);
-      const response = await apiPost(`/company/reject-employees/${id}`, {});
+      const response = await apiPost(`/company/reject-employees/`, formData);
       toast.success(response.data.message);
       dispatch(getEmployees({ approvalStatus: "approved" }))
       dispatch(getCompanyDetails())
@@ -246,7 +246,24 @@ export const getEmployeeTransactions = createAsyncThunk(
   }
 );
 
-/**==============Get Employee Transactions======= **/
+/**==============Get Single Employee Transactions======= **/
+export const getSingleEmployeeTransactions = createAsyncThunk(
+  "getSingleEmployeeTransactions",
+  async (id: string, { dispatch }) => {
+    try {
+      dispatch(fetchDataStart);
+      const response = await apiGet(`/company/employee-single-transaction/${id}`);
+      console.log(response.data)
+      dispatch(fetchSingleEmployeeTransaction(response.data.data));
+    } catch (error: any) {
+      console.log(error.response.data.error);
+      toast.error(error.response.data.Error);
+      dispatch(fetchDataFailure(error.response.data.error));
+    }
+  }
+);
+
+/**==============Get Single Employee======= **/
 export const getSingleEmployee = createAsyncThunk(
   "getSingleEmployee",
   async (id: string, { dispatch }) => {
@@ -262,7 +279,7 @@ export const getSingleEmployee = createAsyncThunk(
     }
   }
 );
-/**==============Get Employee Transactions======= **/
+/**==============Delete Single Transactions======= **/
 export const deleteSingleEmployee = createAsyncThunk(
   "deleteSingleEmployee",
   async (id: string, { dispatch }) => {
