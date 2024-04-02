@@ -30,8 +30,8 @@ const SingleTransaction: React.FC = () => {
         },
         {
             title: "Interest Rate",
-            progress: ((singleEmployeetransactions?.amountTobePaid - singleEmployeetransactions?.creditFunded) / 100)?.toFixed(2),
-            total: 100,
+            progress: ((singleEmployeetransactions?.amountTobePaid - singleEmployeetransactions?.creditFunded) / singleEmployeetransactions?.creditFunded)?.toFixed(2),
+            total: singleEmployeetransactions?.creditFunded,
             isAmount: false
         },
         {
