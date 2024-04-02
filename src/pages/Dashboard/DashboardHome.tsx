@@ -9,7 +9,7 @@ import customer from "../../assets/customer.png";
 import Help from "./Help";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { truncateString } from "../../utils/serviceUtils";
+import { formatAmount, truncateString } from "../../utils/serviceUtils";
 import { getDashboardInfo, getEmployeeTransactions } from "../../redux/actions";
 
 const DashboardHome = () => {
@@ -18,55 +18,6 @@ const DashboardHome = () => {
 
   const company = useSelector((state: any) => state.company)
   const transactions = useSelector((state: any) => state.transactions)
-  // const transactions = {
-  //   totalCredit: 50000,
-  //   totalActiveCredit: 50000,
-  //   totalDuePayment: 0,
-  //   employeesData: [
-  //     {
-  //       userId: "658778e9b97e43b88224744b",
-  //       name: "solomon aboki",
-  //       email: "lotrigogeff@gmail.com",
-  //       phoneNumber: "+2349138174761",
-  //       workData: [
-  //         {
-  //           companyName: "Adeboye Group",
-  //           jobTitle: "Software Developer",
-  //           employmentStatus: "Full time",
-  //           employeeEmailAddress: "boye@adeboyeboye.com",
-  //           isWorkDataVerified: true,
-  //           workSalary: "400,000",
-  //           proofOfWork: "https://firebasestorage.googleapis.com/v0/b/lucred-715bc.appspot.com/o/company%2Fhair%20salon.jpeg?alt=media&token=af836869-cb16-4a9a-87d2-ad80d280632d",
-  //           company: {
-  //             _id: "65a542fe79a8ab83d00c217a",
-  //             name: "Adeboye Group",
-  //             address: "Ogunrinde Str Lagos",
-  //             emailAddress: "adeboyesamueladeyemi@adeboyegroup.com",
-  //             totalEmployees: 50,
-  //             cacNumber: "2e3rr4e3",
-  //             companyId: "#d78217",
-  //             phoneNumber: "+2348134488510",
-  //             city: "Ikeja",
-  //             country: "Canada",
-  //             logo: "https://firebasestorage.googleapis.com/v0/b/lucred-715bc.appspot.com/o/company%2FbarbingImg.jpeg?alt=media&token=ae342462-a6bc-4adf-b15d-da9d7b61e1ed",
-  //             isCompanyActive: false,
-  //             totalHR: 5,
-  //             createdBy: "6358667bcf19ce096fb7545f",
-  //             createdAt: "2024-01-15T14:36:46.124Z",
-  //             updatedAt: "2024-01-30T17:31:33.562Z",
-  //             __v: 0,
-  //             payDay: 29
-  //           },
-  //           _id: "65a547a879a8ab83d00c2192"
-  //         }
-  //       ],
-  //       currentCredit: 50000,
-  //       totalCredit: 50000,
-  //       status: "Active",
-  //       date: "2024-01-29T00:00:00.000Z"
-  //     }
-  //   ]
-  // }
 
   useEffect(() => {
     dispatch(getDashboardInfo())
@@ -116,8 +67,8 @@ const DashboardHome = () => {
           <div className="flex justify-between w-[250%] lg:w-[100%] my-[5%] lg:my-[0%] ">
             <AnalyticCard width={`w-[23%]`} icon={revenue} total={`Total Number of Employees`} amount={company?.totalEmployees} />
             <AnalyticCard width={`w-[23%]`} icon={customer} total={`Days Until Next Payment`} amount={company?.daysTillPayDay} />
-            <AnalyticCard width={`w-[23%]`} icon={transaction} total={`Total Number of Credit`} amount={company?.totalNumberOfCreditAmount} />
-            <AnalyticCard width={`w-[23%]`} icon={product} total={`Due Payment`} amount={company?.totalDuePaymentAmount} />
+            <AnalyticCard width={`w-[23%]`} icon={transaction} total={`Total Number of Credit`} amount={formatAmount(company?.totalNumberOfCreditAmount)} />
+            <AnalyticCard width={`w-[23%]`} icon={product} total={`Due Payment`} amount={formatAmount(company?.totalDuePaymentAmount)} />
           </div>
 
         </div>
@@ -249,8 +200,8 @@ const TopTransactions = (transactions: any) => {
                 <td className='font-[400] flex justify-center items-center'><img src={elem.coverImage} alt="" className='h-[50px]' /></td>
                 <td className='font-[400]'>{elem.name}</td>
                 <td className='font-[400]'>{elem.workData?.[0]?.jobTitle}</td>
-                <td className='font-[400]'>₦{elem.currentCredit}</td>
-                <td className='font-[400]'>₦{elem.totalCredit}</td>
+                <td className='font-[400]'>{formatAmount(elem.currentCredit)}</td>
+                <td className='font-[400]'>{formatAmount(elem.totalCredit)}</td>
                 <td className={`${elem.status === 'Active' ? 'text-[#32C38F]' : 'text-[#D72D2D]'} font-[400]`}>{elem.status}</td>
               </tr>))}
           </tbody>

@@ -93,8 +93,8 @@ const Transactions = () => {
                                     <td className='font-[400]'>{elem.email}</td>
                                     <td className='font-[400]'>{elem.workData?.[0]?.jobTitle}</td>
                                     <td className='font-[400]'>{elem.phoneNumber}</td>
-                                    <td className='font-[400]'>₦{elem.currentCredit}</td>
-                                    <td className='font-[400]'>₦{elem.totalCredit}</td>
+                                    <td className='font-[400]'>{formatAmount(elem.currentCredit)}</td>
+                                    <td className='font-[400]'>{formatAmount(elem.totalCredit)}</td>
                                     <td className={`${elem.status === 'Active' ? 'text-[#32C38F]' : 'text-[#D72D2D]'} font-[400]`}>{elem.status}</td>
                                     <td className='font-[400] text-[#110077] cursor-pointer' onClick={() => navigate(`/dashboard/transaction/${elem.userId}`)}> View </td>
                                 </tr>))}
