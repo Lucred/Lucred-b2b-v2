@@ -200,7 +200,7 @@ export const rejectEmployees = createAsyncThunk(
   async (formData: any, { dispatch }) => {
     try {
       dispatch(fetchDataStart);
-      const response = await apiPost(`/company/reject-employees/`, formData);
+      const response = await apiPost(`/company/reject-employee/`, formData);
       toast.success(response.data.message);
       dispatch(getEmployees({ approvalStatus: "approved" }))
       dispatch(getCompanyDetails())
