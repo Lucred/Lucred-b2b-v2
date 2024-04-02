@@ -30,7 +30,7 @@ const SingleTransaction: React.FC = () => {
         },
         {
             title: "Interest Rate",
-            progress: ((singleEmployeetransactions?.amountTobePaid - singleEmployeetransactions?.creditFunded) / singleEmployeetransactions?.creditFunded * 100)?.toFixed(2),
+            progress: (((singleEmployeetransactions?.amountTobePaid - singleEmployeetransactions?.creditFunded) / singleEmployeetransactions?.creditFunded) * 100)?.toFixed(2),
             total: singleEmployeetransactions?.creditFunded,
             isAmount: false
         },
@@ -87,7 +87,7 @@ const SingleTransaction: React.FC = () => {
                                 <tbody>
                                     {singleEmployeetransactions?.paymentSchedule?.map((elem: any, id: number) => (
                                         <tr key={id} className='bg-[#FFFFFF] text-[0.8rem] text-[#171515] text-center w-[100%] h-[10vh] '>
-                                            <td className='font-[400]'>{formatDate(elem.date, 'longDateTime') }</td>
+                                            <td className='font-[400]'>{formatDate(elem.date, 'longDateTime')}</td>
                                             <td className='font-[400]'>{formatAmount(elem.amount)}</td>
                                             <td className='font-[400]'>{formatAmount(elem.pendingBalance)}</td>
                                             <td className='font-[400]'>{elem.paymentStatus}</td>
