@@ -84,10 +84,10 @@ const Employees = () => {
                                         <td className='font-[400] flex justify-center items-center h-[10vh]'><img src={elem.coverImage} alt="" className='h-[50px]' /></td>
                                         <td className='font-[400]'>{elem.name}</td>
                                         <td className='font-[400]'>{elem.email}</td>
-                                        <td className='font-[400]'>{elem.workData?.[0]?.jobTitle}</td>
-                                        <td className='font-[400]'>₦{elem.workData?.[0]?.workSalary}</td>
+                                        <td className='font-[400]'>{elem.workData?.jobTitle}</td>
+                                        <td className='font-[400]'>₦{elem.workData?.workSalary}</td>
                                         <td className='font-[400]'>{elem.phoneNumber}</td>
-                                        <td className='font-[400]'>{elem.workData?.[0]?.employmentStatus}</td>
+                                        <td className='font-[400]'>{elem.workData?.employmentStatus}</td>
                                         <td className='font-[400] flex justify-center items-center h-[12vh]'>
                                             <div className='mx-[2px] text-[#32C38F] cursor-pointer' onClick={() => navigate(`/dashboard/employees/${elem.id}`)} ><img src={view} alt='view' /> </div>
                                             <div className='mx-[2px] text-[#32C38F] cursor-pointer' onClick={() => navigate(`/dashboard/issue-credit/${elem.id}`)} ><img src={edit} alt='edit' /> </div>

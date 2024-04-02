@@ -1,8 +1,8 @@
 import axios from "axios";
 
 
-const baseUrl = "https://api.lucred.co/api/v1";
-// const baseUrl = "https://lucred-backend.onrender.com/api/v1";
+// const baseUrl = "https://api.lucred.co/api/v1";
+const baseUrl = "https://lucred-backend.onrender.com/api/v1";
 // const baseUrl = "https://e3d5-105-112-203-82.ngrok-free.app/api/v1";
 
 export const apiGet = (path:string) => {
