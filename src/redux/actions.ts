@@ -163,7 +163,7 @@ export const withdraw = createAsyncThunk(
   async (formData: any, { dispatch }) => {
     try {
       dispatch(fetchDataStart);
-      const response = await apiPut(`/merchants/withdraw`, formData);
+      const response = await apiPost(`/merchants/withdraw`, formData);
       toast.success(response.data.message);
       // dispatch(fetchDataSuccess(response.data));
       // setTimeout(() => {
