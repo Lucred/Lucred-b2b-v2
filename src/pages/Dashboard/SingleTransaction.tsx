@@ -31,7 +31,7 @@ const SingleTransaction: React.FC = () => {
         {
             title: "Interest Rate",
             progress: (((singleEmployeetransactions?.amountTobePaid - singleEmployeetransactions?.creditFunded) / singleEmployeetransactions?.creditFunded) * 100)?.toFixed(2),
-            total: singleEmployeetransactions?.creditFunded,
+            total: 100,
             isAmount: false
         },
         {
@@ -80,7 +80,7 @@ const SingleTransaction: React.FC = () => {
                                     <tr className='bg-[#1100770A] text-[0.8rem]  text-[#171515] font-[700] w-[100%] px-[5%] '>
                                         <th className='font-[500] py-[1%]'>DUE ON</th>
                                         <th className='font-[500]'>TOTAL PAYMENT</th>
-                                        <th className='font-[500]'>PENDING BALANCE</th>
+                                        <th className='font-[500]'>MONTHLY PAYMENT</th>
                                         <th className='font-[500]'>PAYMENT STATUS</th>
                                     </tr>
                                 </thead>
