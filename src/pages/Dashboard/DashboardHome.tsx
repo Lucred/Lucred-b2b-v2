@@ -92,6 +92,7 @@ export const DashNav = () => {
   const location = useLocation();
   const logo = localStorage.getItem("logo")
   const email = localStorage.getItem("email")
+  const companyName = localStorage.getItem("companyName")
   return (
     <div className="flex justify-between items-center bg-[#533AE90D] px-[3%] h-[8vh]">
       <div className="w-[50%] bg-[#FFFFFF] flex items-center justify-start h-[5vh] ">
@@ -106,7 +107,7 @@ export const DashNav = () => {
         <img src={bellRing} alt="" className="h-[2vh] mr-[5%]" />
         <img src={logo || avatar} alt="" className="h-[3.5vh] w-[3.5vh] mr-[5%] rounded-[50%]" />
         <div className="flex">
-          Company HR <br />
+          {companyName} <br />
           {email && truncateString(email, 15)}
         </div>
       </div>

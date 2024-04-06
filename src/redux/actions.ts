@@ -15,6 +15,7 @@ export const loginUser = createAsyncThunk(
       console.log(response)
       localStorage.setItem("userId", response.data.data.hrData._id);
       localStorage.setItem("companyId", response.data.data.companyData._id);
+      localStorage.setItem("companyName", response.data.data.companyData.name);
       localStorage.setItem("authcompanyId", response.data.data.companyData.companyId);
       localStorage.setItem("b2b-signature", response.data.data.token);
       localStorage.setItem("logo", response.data.data.companyData.logo)
