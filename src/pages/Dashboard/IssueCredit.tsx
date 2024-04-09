@@ -53,14 +53,11 @@ const IssueCredit = () => {
             userId: employeeId,
             creditAmount: +formData.amount,
             creditDuration: +formData.duration,
-            monthlyRepayment: +compoundInterest,
+            monthlyRepayment: +((+compoundInterest + +formData.amount) / formData.duration).toFixed(2),
             totalCreditPayment: +formData.amount + +compoundInterest,
             startDate: new Date().toISOString().split('T')[0]
         }
-        console.log('ddddd', payload);
-
         const res = await dispatch(approveCredit(payload))
-        console.log('ressss', res);
         setFormData({
             amount: "",
             duration: 0,
@@ -204,7 +201,7 @@ const IssueCredit = () => {
                                     </div>
                                     <div className='my-[3%]'>
                                         <div className='text-[0.9rem] font-[400] pb-[2px]'>Salary:</div>
-                                        <div className='text-[0.9rem] font-[400] text-[#110077]'>{currentEmployee.salary}</div>
+                                        <div className='text-[0.9rem] font-[400] text-[#110077]'>{"₦" + currentEmployee.salary}</div>
                                     </div>
                                     <div className='my-[3%]'>
                                         <div className='text-[0.9rem] font-[400] pb-[2px]'>Credit Date:</div>

@@ -308,7 +308,7 @@ export const approveCredit = createAsyncThunk(
       toast.success(response.data.data.message ? response.data.data.message : response.data.message);
       dispatch(getEmployees({ approvalStatus: "approved" }))
     } catch (error: any) {
-      toast.error(error.response.data.message);
+      toast.error(error.response.data.data.message);
       dispatch(fetchDataFailure(error.response.data.error));
     }
   }
