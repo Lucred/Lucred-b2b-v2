@@ -80,7 +80,7 @@ const Transactions = () => {
                                 <th className='font-[500]'>Job Title</th>
                                 <th className='font-[500]'>Phone No</th>
                                 <th className='font-[500]'>Current Credit</th>
-                                <th className='font-[500]'>Total Credit</th>
+                                <th className='font-[500]'>Monthly Payment</th>
                                 <th className='font-[500]'>Status</th>
                                 <th className='font-[500]'>Action</th>
                             </tr>
