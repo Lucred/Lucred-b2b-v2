@@ -1,7 +1,6 @@
 import axios from "axios";
 
-
-const baseUrl = "https://api.lucred.co/api/v1";
+const baseUrl = process.env.REACT_APP_BASE_URL;
 // const baseUrl = "https://lucred-backend.onrender.com/api/v1";
 // const baseUrl = "https://e3d5-105-112-203-82.ngrok-free.app/api/v1";
 

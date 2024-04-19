@@ -9,7 +9,7 @@ export const truncateString = (str: string, maxLength: number) => {
 export const formatAmount = (amount: number | string | null, decimalPlaces: number = 2) => {
     // Check if the input is a valid number
     if (isNaN(Number(amount)) || amount === null) {
-        return 'Invalid input';
+        return '';
     }
 
     // Convert the amount to a fixed number of decimal places
