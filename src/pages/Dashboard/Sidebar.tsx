@@ -63,12 +63,12 @@ export const MinSidebar1 = ({ click }: any) => {
             <ul className='h-[60vh] flex flex-col justify-evenly items-center ml-[5%]'>
                 <li><Link to={'/dashboard'} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={home} alt="" className='h-[2vh] mr-[5%]' /></Link></li>
                 <li><Link to={'/dashboard/employees'} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={employees} alt="" className='h-[2vh] mr-[5%]' /></Link></li>
-                <li><Link to={'/dashboard/statistics'} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={statistics} alt="" className='h-[2vh] mr-[5%]' /></Link></li>
+                {/* <li><Link to={'/dashboard/statistics'} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={statistics} alt="" className='h-[2vh] mr-[5%]' /></Link></li> */}
                 <li><Link to={'/dashboard/transaction'} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={transaction} alt="" className='h-[2vh] mr-[5%]' /></Link></li>
-                <li><Link to={'/dashboard/user-guide'} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={userGuide} alt="" className='h-[auto] mr-[5%]' /></Link></li>
+                {/* <li><Link to={'/dashboard/user-guide'} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={userGuide} alt="" className='h-[auto] mr-[5%]' /></Link></li> */}
                 <li><Link to={'/dashboard/profile'} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={profile} alt="" className='h-[2vh] mr-[5%]' /></Link></li>
                 <li><Link to={'/dashboard/settings'} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={settings} alt="" className='h-[2vh] mr-[5%]' /></Link></li>
-                <li><Link to={''} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={help} alt="" className='h-[2vh] mr-[5%]' /></Link></li>
+                {/* <li><Link to={''} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={help} alt="" className='h-[2vh] mr-[5%]' /></Link></li> */}
                 <li><Link to={''} className='text-[#fff] flex pl-[5%] items-center ' onClick={click}><img src={logout} alt="" className='h-[2vh] mr-[5%]' /></Link></li>
             </ul>
 

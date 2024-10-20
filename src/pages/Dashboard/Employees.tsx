@@ -72,7 +72,7 @@ const Employees = () => {
                                     <th className='font-[500] py-[1%]'>Name</th>
                                     <th className='font-[500]'>Email</th>
                                     <th className='font-[500]'>Job Title</th>
-                                    <th className='font-[500]'>Pay</th>
+                                    <th className='font-[500]'>Income</th>
                                     <th className='font-[500]'>Phone No</th>
                                     <th className='font-[500]'>Status</th>
                                     <th className='font-[500]'>Action</th>

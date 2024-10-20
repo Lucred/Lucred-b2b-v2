@@ -39,7 +39,7 @@ const SingleEmployee = () => {
           className="flex lg:flex-row flex-col justify-between"
 
         >
-          <div className="bg-[#fff] lg:w-[40%] px-[3%] py-[2%] rounded-md ">
+          <div className="bg-[#fff] lg:w-[600px] px-[3%] py-[2%] rounded-md ">
             <TextInput
               label="Employee First Name"
               placeholder="Employee First Name"
@@ -90,7 +90,7 @@ const SingleEmployee = () => {
               readonly={true}
             />
           </div>
-          <div className="bg-[#fff] lg:w-[50%] px-[3%] py-[2%] rounded-md ">
+          {/* <div className="bg-[#fff] lg:w-[50%] px-[3%] py-[2%] rounded-md ">
             <div>
               <h3 className="text-[#110077]">Employee Images</h3>
               <div className="flex justify-between">
@@ -102,7 +102,7 @@ const SingleEmployee = () => {
 
               </div>
             </div>
-          </div>
+          </div> */}
         </form>
       </div>
     </div>

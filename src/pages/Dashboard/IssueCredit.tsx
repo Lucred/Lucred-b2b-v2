@@ -130,10 +130,10 @@ const IssueCredit = () => {
                     <div className='py-[2%] px-[1%] w-[65%]'>
                         <div className='w-[100%] overflow-scroll'>
                             <TextInput
-                                label="Amount of loan request"
+                                label="Amount of credit request"
                                 name="amount"
                                 value={formData.amount}
-                                placeholder={`Amount of loan request`}
+                                placeholder={`Amount of credit request`}
                                 onChange={handleChange}
                                 width={`w-[100%]`}
                             />
@@ -151,7 +151,7 @@ const IssueCredit = () => {
                                         <div className='my-[3%] mr-6 w-[50%]'>
                                             <div className='text-[0.9rem] font-[400] pb-[2px]'>You will pay</div>
                                             <div className='text-[0.9rem] font-[400] text-[#110077]'>{formatAmount(((+compoundInterest + +formData.amount) / formData.duration).toFixed(2))}</div>
-                                            <div className='text-[0.9rem] font-[400] text-[#C3C3C4]'>Per Month</div>
+                                            <div className='text-[0.9rem] font-[600] text-[#C3C3C4]'>Per Month</div>
                                         </div>
                                         <div className='my-[3%] w-[50%]'>
                                             <div className='text-[0.9rem] font-[400] pb-[2px]'>Due Date</div>
@@ -160,7 +160,7 @@ const IssueCredit = () => {
                                     </div>
                                     <div className='flex justify-center'>
                                         <div className='my-[3%] mr-6 w-[50%]'>
-                                            <div className='text-[0.9rem] font-[400] pb-[2px]'>Loan</div>
+                                            <div className='text-[0.9rem] font-[400] pb-[2px]'>Credit</div>
                                             <div className='text-[0.9rem] font-[400] text-[#110077]'>{formatAmount(formData.amount)}</div>
                                         </div>
                                         <div className='my-[3%] mr-6 w-[50%]'>

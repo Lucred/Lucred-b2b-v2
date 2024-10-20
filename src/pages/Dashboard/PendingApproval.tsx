@@ -62,7 +62,7 @@ const PendingApproval = () => {
                                         <th className='font-[500]'></th>
                                         <th className='font-[500] py-[1%]'>Name</th>
                                         <th className='font-[500]'>Job Title</th>
-                                        <th className='font-[500]'>Salary</th>
+                                        <th className='font-[500]'>Income</th>
                                         <th className='font-[500]'>Phone No</th>
                                         <th className='font-[500]'>Status</th>
                                         <th className='font-[500]'></th>
@@ -114,7 +114,7 @@ const PendingApproval = () => {
                                         <div className='text-[0.9rem] font-[400] text-[#110077]'>{currentEmployee.phoneNumber}</div>
                                     </div>
                                     <div className='my-[3%]'>
-                                        <div className='text-[0.9rem] font-[400] pb-[2px]'>Salary:</div>
+                                        <div className='text-[0.9rem] font-[400] pb-[2px]'>Income:</div>
                                         <div className='text-[0.9rem] font-[400] text-[#110077]'>₦{currentEmployee.workData?.workSalary}</div>
                                     </div>
                                     <div className='my-[3%]'>
