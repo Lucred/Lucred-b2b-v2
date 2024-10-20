@@ -196,7 +196,7 @@ const TopTransactions = (transactions: any) => {
             </tr>
           </thead>
           <tbody>
-            {transactions?.transactions?.allEmployeesData?.map((elem: any, id: number) => (
+            {transactions?.transactions?.allEmployeesData?.slice(0, 5).map((elem: any, id: number) => (
               <tr key={id} className='bg-[#FFFFFF] text-[0.8rem] text-[#171515] text-center w-[100%]'>
                 <td className='font-[400] flex justify-center items-center'><img src={elem.coverImage} alt="" className='h-[50px]' /></td>
                 <td className='font-[400]'>{elem.name}</td>
