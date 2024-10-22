@@ -4,11 +4,6 @@ import { AnalyticCard } from "./DashboardHome"
 import phone from "../../assets/phone.png"
 import xmark from "../../assets/xmark.png"
 import search from '../../assets/search.png'
-import img from '../../assets/img.png'
-import img1 from '../../assets/img1.png'
-import img2 from '../../assets/img2.png'
-import img3 from '../../assets/img3.png'
-import img4 from '../../assets/img4.png'
 import { useEffect, useState } from "react"
 import { getEmployeeTransactions, withdraw } from "../../redux/actions"
 import { useDispatch, useSelector } from "react-redux"
@@ -16,12 +11,9 @@ import { formatAmount } from "../../utils/serviceUtils"
 import Loader from "../../components/Loader"
 
 const Transactions = () => {
-    const location = useLocation()
     const navigate = useNavigate()
 
-    const [isLoading, setIsLoading] = useState(true)
     const [showModal, setShowModal] = useState(false)
-    const [currentDate, setcurrentDate] = useState(null)
     const toggleModal = () => {
         setShowModal(!showModal)
     }
@@ -31,14 +23,10 @@ const Transactions = () => {
     const dispatch = useDispatch() as unknown as any
 
     useEffect(() => {
-        if (transactions && transactions?.totalActiveCredit) {
-            setIsLoading(false)
-        } else dispatch(getEmployeeTransactions())
-    }, [transactions])
-
+        dispatch(getEmployeeTransactions())
+    }, [])
 
     return (
-        isLoading ? <Loader /> :
             <div className={`${window.innerWidth > 768 ? `ml-[15%]` : `ml-[10%]`} bg-[#1100770A]min-h-[100vh] `}>
                 <div className='mx-[3%]'>
                     <div className="">
