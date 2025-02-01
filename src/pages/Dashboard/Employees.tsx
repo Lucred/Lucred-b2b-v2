@@ -1,125 +1,427 @@
-import search from '../../assets/search.png'
-import edit from '../../assets/edit.png'
-import view from '../../assets/view.png'
-import trash from '../../assets/trash.png'
-import img from '../../assets/img.png'
-import img1 from '../../assets/img1.png'
-import img2 from '../../assets/img2.png'
-import img3 from '../../assets/img3.png'
-import img4 from '../../assets/img4.png'
-import phone from '../../assets/phone.png'
-import { Link, useNavigate } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { useEffect, useState } from 'react'
-import { deleteProduct, deleteSingleEmployee, getEmployees } from '../../redux/actions'
+// import React, { useState, useEffect } from "react";
+// import { Link, useNavigate } from "react-router-dom";
+// import { useDispatch, useSelector } from "react-redux";
+// import { Search, Eye, Edit, Trash2 } from "lucide-react";
 
-const Employees = () => {
-    const dispatch = useDispatch() as unknown as any
-    const navigate = useNavigate()
-    const id = localStorage.getItem("companyId") as unknown as string
-    const [showConfirmation, setShowConfirmation] = useState(false);
-    const [currentId, setcurrentId] = useState("");
+// import { Button } from "../../components/ui/button";
+// import { Input } from "../../components/ui/input";
+// import {
+//   Table,
+//   TableBody,
+//   TableCell,
+//   TableHead,
+//   TableHeader,
+//   TableRow,
+// } from "../../components/ui/table";
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogDescription,
+//   DialogFooter,
+// } from "../../components/ui/dialog";
+// import {
+//   Avatar,
+//   AvatarImage,
+//   AvatarFallback,
+// } from "../../components/ui/avatar";
+// import { Badge } from "../../components/ui/badge";
 
-    const handleButtonClick = () => {
-        setShowConfirmation(true);
-    };
+// import { deleteSingleEmployee, getEmployees } from "../../redux/actions";
+// import { cn } from "../../utils";
 
-    const handleConfirm = async () => {
-        await dispatch(deleteSingleEmployee(currentId))
-        setShowConfirmation(false);
-    };
+// const Employees: React.FC = () => {
+//   const dispatch = useDispatch() as unknown as any;
+//   const [showConfirmation, setShowConfirmation] = useState(false);
+//   const [currentId, setCurrentId] = useState("");
+//   const [searchTerm, setSearchTerm] = useState("");
 
-    const handleCancel = () => {
-        setShowConfirmation(false);
-    };
+//   const employees = useSelector((state: any) => state.employees);
 
-    const employees = useSelector((state: any) => state.employees)
-    console.log('employees', employees);
+//   useEffect(() => {
+//     dispatch(getEmployees({ approvalStatus: "approved" }));
+//     dispatch(getEmployees({ approvalStatus: "pending" }));
+//   }, [dispatch]);
 
-    const deleteEmployee = (id: string) => {
-        setcurrentId(id)
-        handleButtonClick()
+//   const deleteEmployee = (id: string) => {
+//     setCurrentId(id);
+//     setShowConfirmation(true);
+//   };
+
+//   const handleConfirm = async () => {
+//     await dispatch(deleteSingleEmployee(currentId));
+//     setShowConfirmation(false);
+//   };
+
+//   const filteredEmployees = employees?.filter(
+//     (emp: any) =>
+//       emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+//       emp.email.toLowerCase().includes(searchTerm.toLowerCase())
+//   );
+
+//   return (
+//     <div className={cn(`${window.innerWidth > 768 ? `ml-16` : `ml-16`} `)}>
+//       <div className='space-y-4'>
+//         <div className='ml-4'>
+//           <p className='text-sm text-muted-foreground '>Dashboard / Employee</p>
+//           <h2 className='text-2xl font-semibold tracking-tight'>Employees</h2>
+//         </div>
+
+//         <div className='bg-white rounded-lg shadow-sm p-6 space-y-4'>
+//           <div className='flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0'>
+//             <div className='w-full md:w-1/2 relative'>
+//               <Search className='absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground' />
+//               <Input
+//                 placeholder='Search employees'
+//                 className='pl-10'
+//                 value={searchTerm}
+//                 onChange={(e) => setSearchTerm(e.target.value)}
+//               />
+//             </div>
+//             <div className='flex space-x-2'>
+//               <Button asChild variant='outline'>
+//                 <Link to='/dashboard/pending-approvals'>Pending Approval</Link>
+//               </Button>
+//             </div>
+//           </div>
+
+//           <div className='overflow-x-auto'>
+//             <Table>
+//               <TableHeader>
+//                 <TableRow>
+//                   <TableHead>Photo</TableHead>
+//                   <TableHead>Name</TableHead>
+//                   <TableHead>Email</TableHead>
+//                   <TableHead>Job Title</TableHead>
+//                   <TableHead>Income</TableHead>
+//                   <TableHead>Phone</TableHead>
+//                   <TableHead>Status</TableHead>
+//                   <TableHead>Actions</TableHead>
+//                 </TableRow>
+//               </TableHeader>
+//               <TableBody>
+//                 {filteredEmployees?.map((emp: any) => (
+//                   <TableRow key={emp.id}>
+//                     <TableCell>
+//                       <Avatar
+//                         className={`${
+//                           emp.name[0] === "J" ? "bg-green-600" : "bg-orange-600"
+//                         }  text-white`}
+//                       >
+//                         <AvatarImage src={emp.coverImage} alt={emp.name} />
+//                         <AvatarFallback>{emp.name.charAt(0)}</AvatarFallback>
+//                       </Avatar>
+//                     </TableCell>
+//                     <TableCell>{emp.name}</TableCell>
+//                     <TableCell>{emp.email}</TableCell>
+//                     <TableCell>{emp.workData?.jobTitle}</TableCell>
+//                     <TableCell>₦{emp.workData?.workSalary}</TableCell>
+//                     <TableCell>{emp.phoneNumber}</TableCell>
+//                     <TableCell>
+//                       <Badge
+//                         variant={
+//                           emp.workData?.employmentStatus === "Active"
+//                             ? "default"
+//                             : "destructive"
+//                         }
+//                       >
+//                         {emp.workData?.employmentStatus}
+//                       </Badge>
+//                     </TableCell>
+//                     <TableCell>
+//                       <div className='flex space-x-3'>
+//                         <Link to={`/dashboard/employees/${emp.id}`}>
+//                           <Eye className='h-4 w-4' />
+//                         </Link>
+//                         <Link to={`/dashboard/issue-credit/${emp.id}`}>
+//                           <Edit className='h-4 w-4' />
+//                         </Link>
+
+//                         <Trash2
+//                           onClick={() => deleteEmployee(emp.id)}
+//                           className='h-4 w-4 text-destructive'
+//                         />
+//                       </div>
+//                     </TableCell>
+//                   </TableRow>
+//                 ))}
+//               </TableBody>
+//             </Table>
+//           </div>
+//         </div>
+//       </div>
+
+//       <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
+//         <DialogContent>
+//           <DialogHeader>
+//             <DialogTitle>Confirm Deletion</DialogTitle>
+//             <DialogDescription>
+//               Are you sure you want to delete this employee?
+//             </DialogDescription>
+//           </DialogHeader>
+//           <DialogFooter>
+//             <Button
+//               variant='outline'
+//               onClick={() => setShowConfirmation(false)}
+//             >
+//               Cancel
+//             </Button>
+//             <Button variant='destructive' onClick={handleConfirm}>
+//               Delete
+//             </Button>
+//           </DialogFooter>
+//         </DialogContent>
+//       </Dialog>
+//     </div>
+//   );
+// };
+
+// export default Employees;
+
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Search, Eye, Edit, Trash2, Loader2 } from "lucide-react";
+
+import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../../components/ui/table";
+import { Skeleton } from "../../components/ui/skeleton";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "../../components/ui/dialog";
+import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from "../../components/ui/avatar";
+import { Badge } from "../../components/ui/badge";
+
+import { deleteSingleEmployee, getEmployees } from "../../redux/actions";
+import { cn } from "../../utils";
+
+const Employees: React.FC = () => {
+  const dispatch = useDispatch() as unknown as any;
+  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [currentId, setCurrentId] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  const employees = useSelector((state: any) => state.employees);
+  const error = useSelector((state: any) => state.error);
+
+  useEffect(() => {
+    setIsLoading(true);
+    Promise.all([
+      dispatch(getEmployees({ approvalStatus: "approved" })),
+      dispatch(getEmployees({ approvalStatus: "pending" })),
+    ]).finally(() => setIsLoading(false));
+  }, [dispatch]);
+
+  const deleteEmployee = (id: string) => {
+    setCurrentId(id);
+    setShowConfirmation(true);
+  };
+
+  const handleConfirm = async () => {
+    try {
+      setIsDeleting(true);
+      await dispatch(deleteSingleEmployee(currentId)).unwrap();
+      setShowConfirmation(false);
+    } catch (error: any) {
+      // Error is already handled by the thunk
+      console.error("Delete operation failed:", error);
+    } finally {
+      setIsDeleting(false);
     }
+  };
+  const filteredEmployees = employees?.filter(
+    (emp: any) =>
+      emp.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      emp.email.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
-    useEffect(() => {
-        dispatch(getEmployees({ approvalStatus: "approved" }))
-        dispatch(getEmployees({ approvalStatus: "pending" }))
-    }, [])
-    return (
-        <div className={`${window.innerWidth > 768 ? `ml-[15%]` : `ml-[8%]`} bg-[#1100770A]min-h-[100vh] `}>
-            <div className='mx-[3%]'>
-                <div className='py-[1%]'>
-                    <p className='text-[0.7rem]'>Dashboard/Employee</p>
-                    <h3 className='text-[1.3rem] font-[500]'>Employee</h3>
-                </div>
-
-                <div className='bg-[#fff] py-[2%] px-[1%]'>
-                    <div className='flex items-center justify-between mb-[20px]'>
-                        <div className='lg:w-[25%] w-[50%] bg-[#FFFFFF] flex items-center justify-center h-[5vh] border border-[#C3C3C4] rounded-md'>
-                            <img src={search} alt="" className='h-[2vh] mr-[5%] pl-[5%] lg:pr-[0%]' />
-                            <input type="text" placeholder='Search' className='border-none h-[5vh] text-[#707070] outline-none bg-[transparent]' />
-                        </div>
-                        <div className='flex items-center justify-between'>
-                            {/* <Link to="/dashboard/add-employee" className='text-[#533AE9] w-[auto] min-w-[150px] border border-[1px] px-[10px] h-[5vh] border-[#11007766] lg:mr-[5%] rounded-md flex justify-center items-center'>Approve Credit</Link> */}
-                            <Link to="/dashboard/pending-approvals" className='text-[#533AE9]  w-[auto] min-w-[160px] border border-[1px] px-[10px] h-[5vh] border-[#11007766] lg:mr-[5%] rounded-md flex justify-center items-center'>Pending Approval</Link>
-                        </div>
-                    </div>
-                    <div className='w-[100%] overflow-scroll'>
-                        <table className='w-[250%] lg:w-[100%]  rounded-md my-[2%]'>
-                            <thead  >
-                                <tr className='bg-[#1100770A] text-[0.8rem]  text-[#171515] font-[700] w-[100%] px-[5%] '>
-                                    <th className='font-[500]'></th>
-                                    <th className='font-[500] py-[1%]'>Name</th>
-                                    <th className='font-[500]'>Email</th>
-                                    <th className='font-[500]'>Job Title</th>
-                                    <th className='font-[500]'>Income</th>
-                                    <th className='font-[500]'>Phone No</th>
-                                    <th className='font-[500]'>Status</th>
-                                    <th className='font-[500]'>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {employees?.map((elem: any, id: number) => (
-                                    <tr key={id} className='bg-[#FFFFFF] text-[0.8rem] text-[#171515] text-center w-[100%] h-[10vh] '>
-                                        <td className='font-[400] flex justify-center items-center h-[10vh]'><img src={elem.coverImage} alt="" className='h-[50px]' /></td>
-                                        <td className='font-[400]'>{elem.name}</td>
-                                        <td className='font-[400]'>{elem.email}</td>
-                                        <td className='font-[400]'>{elem.workData?.jobTitle}</td>
-                                        <td className='font-[400]'>₦{elem.workData?.workSalary}</td>
-                                        <td className='font-[400]'>{elem.phoneNumber}</td>
-                                        <td className='font-[400]'>{elem.workData?.employmentStatus}</td>
-                                        <td className='font-[400] flex justify-center items-center h-[12vh]'>
-                                            <div className='mx-[2px] text-[#32C38F] cursor-pointer' onClick={() => navigate(`/dashboard/employees/${elem.id}`)} ><img src={view} alt='view' /> </div>
-                                            <div className='mx-[2px] text-[#32C38F] cursor-pointer' onClick={() => navigate(`/dashboard/issue-credit/${elem.id}`)} ><img src={edit} alt='edit' /> </div>
-                                            <div className='mx-[2px] text-[#32C38F] cursor-pointer' onClick={() => deleteEmployee(elem.id)} ><img src={trash} alt='trash' /> </div>
-                                        </td>
-
-                                    </tr>))}
-
-                            </tbody>
-                        </table>
-
-                    </div>
-
-                </div>
-
-
-                {showConfirmation && (
-                    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-4 border border-gray-300 shadow-md z-50">
-                        <p className="mb-4">Are you sure you want to proceed?</p>
-                        <button onClick={handleConfirm} className="bg-green-500 text-white px-4 mr-3 py-2 rounded">
-                            Yes
-                        </button>
-                        <button onClick={handleCancel} className="bg-red-500 text-white px-4 py-2 rounded">
-                            No
-                        </button>
-                    </div>
-                )}
-
-            </div>
-
+  const LoadingTableRow = () => (
+    <TableRow>
+      <TableCell>
+        <Skeleton className='bg-gray-100 animate-pulse h-10 w-10 rounded-full' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='bg-gray-100 animate-pulse h-4 w-32' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='bg-gray-100 animate-pulse h-4 w-40' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='bg-gray-100 animate-pulse h-4 w-28' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='bg-gray-100 animate-pulse h-4 w-24' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='bg-gray-100 animate-pulse h-4 w-28' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='bg-gray-100 animate-pulse h-6 w-20 rounded-full' />
+      </TableCell>
+      <TableCell>
+        <div className='flex space-x-3'>
+          <Skeleton className='bg-gray-100 animate-pulse h-4 w-4' />
+          <Skeleton className='bg-gray-100 animate-pulse h-4 w-4' />
+          <Skeleton className='bg-gray-100 animate-pulse h-4 w-4' />
         </div>
-    )
-}
+      </TableCell>
+    </TableRow>
+  );
 
-export default Employees
+  return (
+    <div className={cn(`${window.innerWidth > 768 ? `ml-16` : `ml-16`} `)}>
+      <div className='space-y-4'>
+        <div className='ml-4'>
+          <p className='text-sm text-muted-foreground'>Dashboard / Employee</p>
+          <h2 className='text-2xl font-semibold tracking-tight'>Employees</h2>
+        </div>
+
+        <div className='bg-white rounded-lg shadow-sm p-6 space-y-4'>
+          <div className='flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0'>
+            <div className='w-full md:w-1/2 relative'>
+              <Search className='absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground' />
+              <Input
+                placeholder='Search employees'
+                className='pl-10'
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+            <div className='flex space-x-2'>
+              <Button asChild variant='outline'>
+                <Link to='/dashboard/pending-approvals'>Pending Approval</Link>
+              </Button>
+            </div>
+          </div>
+
+          <div className='overflow-x-auto'>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Photo</TableHead>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Email</TableHead>
+                  <TableHead>Job Title</TableHead>
+                  <TableHead>Income</TableHead>
+                  <TableHead>Phone</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {isLoading
+                  ? Array(5)
+                      .fill(0)
+                      .map((_, index) => <LoadingTableRow key={index} />)
+                  : filteredEmployees?.map((emp: any) => (
+                      <TableRow key={emp.id}>
+                        <TableCell>
+                          <Avatar
+                            className={`${
+                              emp.name[0] === "J"
+                                ? "bg-green-600"
+                                : "bg-orange-600"
+                            } text-white`}
+                          >
+                            <AvatarImage src={emp.coverImage} alt={emp.name} />
+                            <AvatarFallback>
+                              {emp.name.charAt(0)}
+                            </AvatarFallback>
+                          </Avatar>
+                        </TableCell>
+                        <TableCell>{emp.name}</TableCell>
+                        <TableCell>{emp.email}</TableCell>
+                        <TableCell>{emp.workData?.jobTitle}</TableCell>
+                        <TableCell>₦{emp.workData?.workSalary}</TableCell>
+                        <TableCell>{emp.phoneNumber}</TableCell>
+                        <TableCell>
+                          <Badge
+                            variant={
+                              emp.workData?.employmentStatus === "Active"
+                                ? "default"
+                                : "destructive"
+                            }
+                          >
+                            {emp.workData?.employmentStatus}
+                          </Badge>
+                        </TableCell>
+                        <TableCell>
+                          <div className='flex space-x-3'>
+                            <Link to={`/dashboard/employees/${emp.id}`}>
+                              <Eye className='h-4 w-4' />
+                            </Link>
+                            <Link to={`/dashboard/issue-credit/${emp.id}`}>
+                              <Edit className='h-4 w-4' />
+                            </Link>
+                            <Trash2
+                              onClick={() => deleteEmployee(emp.id)}
+                              className='h-4 w-4 text-destructive'
+                            />
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+              </TableBody>
+            </Table>
+          </div>
+        </div>
+      </div>
+
+      <Dialog open={showConfirmation} onOpenChange={setShowConfirmation}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this employee?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button
+              variant='outline'
+              onClick={() => setShowConfirmation(false)}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant='destructive'
+              onClick={handleConfirm}
+              disabled={isDeleting}
+            >
+              {isDeleting ? (
+                <>
+                  <Loader2 className='mr-2 h-4 w-4 animate-spin' />
+                  Deleting...
+                </>
+              ) : (
+                "Delete"
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
+
+export default Employees;

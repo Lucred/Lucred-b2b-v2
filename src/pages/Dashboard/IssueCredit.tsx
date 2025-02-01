@@ -1,230 +1,329 @@
-import edit from '../../assets/edit.png'
-import view from '../../assets/view.png'
-import trash from '../../assets/trash.png'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { useEffect, useState } from 'react'
-import { approveCredit, approveEmployees, deleteProduct, getEmployees, getSingleEmployee } from '../../redux/actions'
-import { SelectInput, TextInput } from './DashboardAddProduct'
-import { formatAmount } from '../../utils/serviceUtils'
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "../../components/ui/card";
+import { Input } from "../../components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../components/ui/select";
+import { Button } from "../../components/ui/button";
+import { Label } from "../../components/ui/label";
+import {
+  approveCredit,
+  getSingleEmployee,
+  getEmployees,
+} from "../../redux/actions";
+import { formatAmount } from "../../utils/serviceUtils";
+import { cn } from "../../utils";
+import { Employee } from "@/interface";
+import { MoveLeft, Calculator, Calendar, CreditCard } from "lucide-react";
+import { toast } from "react-toastify";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableRow,
+} from "../../components/ui/table";
 
 const IssueCredit = () => {
-    const dispatch = useDispatch() as unknown as any
-    const navigate = useNavigate()
-    const id = localStorage.getItem("companyId") as unknown as string
-    const [currentEmployee, setcurrentEmployee] = useState<any>(null)
-    const [loadingApprove, setloadingApprove] = useState<boolean>(false)
-    const [loadingReject, setloadingReject] = useState<boolean>(false)
-    const [compoundInterest, setcompoundInterest] = useState<any>(0)
+  const dispatch = useDispatch<any>();
+  const navigate = useNavigate();
+  const { employeeId } = useParams();
 
-    const [formData, setFormData] = useState<any>({
-        amount: "",
-        duration: 0,
-    });
+  const [formData, setFormData] = useState({
+    amount: "",
+    duration: 0,
+  });
+  const [compoundInterest, setCompoundInterest] = useState(0);
+  const [currentEmployee, setCurrentEmployee] = useState<Employee | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSummary, setShowSummary] = useState(true);
 
-    const durations = [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-    ]
+  const singleEmployee = useSelector((state: any) => state.singleEmployee);
 
-    const singleEmployee = useSelector((state: any) => state.singleEmployee)
-    console.log('singleEmployee', singleEmployee);
+  const durations = [1, 2, 3, 4, 5, 6];
+  const annualInterestRate = 0.04;
+  const compoundingPeriodsPerYear = 12;
 
-    const handleViewEmployeeData = (item: string) => {
-        setcurrentEmployee(item)
-    }
+  const calculateCompoundInterest = () => {
+    if (!formData.amount || !formData.duration) return;
 
-    const handleApproveEmployee = async (id: string) => {
-        await dispatch(approveEmployees(id))
-        navigate(-1)
-    }
+    const monthlyInterestRate = annualInterestRate / compoundingPeriodsPerYear;
+    const totalCompoundingPeriods =
+      compoundingPeriodsPerYear * +formData.duration;
+    const futureValue =
+      +formData.amount *
+      Math.pow(1 + monthlyInterestRate, totalCompoundingPeriods);
+    const interest = futureValue - +formData.amount;
+    setCompoundInterest(parseFloat(interest.toFixed(2)));
+    setShowSummary(true);
+  };
 
-    const handleRejectEmployee = async (id: string) => {
-        await dispatch(approveEmployees(id))
-        navigate(-1)
-    }
-
-    const handleConfirmCredit = async () => {
-        const payload = {
-            userId: employeeId,
-            creditAmount: +formData.amount,
-            creditDuration: +formData.duration,
-            monthlyRepayment: +((+compoundInterest + +formData.amount) / formData.duration).toFixed(2),
-            totalCreditPayment: +formData.amount + +compoundInterest,
-            startDate: new Date().toISOString().split('T')[0]
-        }
-        const res = await dispatch(approveCredit(payload))
-        setFormData({
-            amount: "",
-            duration: 0,
-        })
-    }
-
-    const handleChange = (e: any) => {
-        e.preventDefault();
-        const { name, value } = e.currentTarget;
-
-        console.log(name, value);
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
-
-    const { employeeId } = useParams()
-    // const annualInterestRate = 4
-    console.log('employeeId', employeeId);
-
-    const annualInterestRate = 0.04;
-    const compoundingPeriodsPerYear = 12;
+  const findDueDate = () => {
     const currentDate = new Date();
+    const futureDate = new Date(
+      currentDate.getFullYear(),
+      currentDate.getMonth() + +formData.duration,
+      currentDate.getDate()
+    );
+    return futureDate.toDateString();
+  };
 
-    const findDueDate = () => {
-        const futureDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + +formData.duration, currentDate.getDate());
-        const formattedFutureDate = futureDate.toDateString();
-        return formattedFutureDate
+  const handleConfirmCredit = async () => {
+    if (isSubmitting) return;
+
+    setIsSubmitting(true);
+    try {
+      const payload = {
+        userId: employeeId,
+        creditAmount: +formData.amount,
+        creditDuration: +formData.duration,
+        monthlyRepayment: +(
+          (+compoundInterest + +formData.amount) /
+          formData.duration
+        ).toFixed(2),
+        totalCreditPayment: +formData.amount + +compoundInterest,
+        startDate: new Date().toISOString().split("T")[0],
+      };
+
+      const result = await dispatch(approveCredit(payload)).unwrap();
+      toast.success(
+        result.data?.message || result.message || "Credit issued successfully"
+      );
+      setFormData({ amount: "", duration: 0 });
+      setCompoundInterest(0);
+      setShowSummary(false);
+    } catch (error: any) {
+      toast.error(typeof error === "string" ? error : "Failed to issue credit");
+    } finally {
+      setIsSubmitting(false);
     }
+  };
 
+  useEffect(() => {
+    if (employeeId) {
+      dispatch(getSingleEmployee(employeeId));
+    }
+    dispatch(getEmployees({ approvalStatus: "pending" }));
+  }, [employeeId, dispatch]);
 
-    const calculateCompoundInterest = () => {
-        const monthlyInterestRate = annualInterestRate / compoundingPeriodsPerYear;
-        const totalCompoundingPeriods = compoundingPeriodsPerYear * +formData.duration;
-        const futureValue = +formData.amount * Math.pow(1 + monthlyInterestRate, totalCompoundingPeriods);
-        const compoundInterest = futureValue - +formData.amount;
-        setcompoundInterest(compoundInterest.toFixed(2))
-        return compoundInterest.toFixed(2);
-    };
+  useEffect(() => {
+    if (singleEmployee) {
+      setCurrentEmployee(singleEmployee);
+    }
+  }, [singleEmployee]);
 
-    useEffect(() => {
-        calculateCompoundInterest()
-    }, [formData])
+  useEffect(() => {
+    if (formData.amount && formData.duration) {
+      calculateCompoundInterest();
+    }
+  }, [formData]);
 
-    useEffect(() => {
-        if (employeeId) {
-            dispatch(getSingleEmployee(employeeId))
-        }
-    }, [employeeId])
-    useEffect(() => {
-        dispatch(getEmployees({ approvalStatus: "pending" }))
-    }, [])
-    useEffect(() => {
-        console.log('singleEmployee', singleEmployee);
+  return (
+    <div className={cn("mx-auto px-4 py-6", "ml-[calc(4rem+1px)]")}>
+      <div className='space-y-6'>
+        <div className='flex items-center gap-4'>
+          <MoveLeft
+            onClick={() => navigate(-1)}
+            className='h-6 w-6 cursor-pointer'
+          />
+          <div>
+            <p className='text-sm text-muted-foreground'>
+              Dashboard/Issue Credit
+            </p>
+            <h1 className='text-2xl font-semibold'>Issue Credit</h1>
+          </div>
+        </div>
 
-        if (singleEmployee) {
-            setcurrentEmployee(singleEmployee)
-        }
-    }, [singleEmployee])
-    return (
-        <div className={`${window.innerWidth > 768 ? `ml-[15%]` : `ml-[8%]`} bg-[#1100770A] min-h-[100vh]  `}>
-            <div className='mx-[3%]'>
-                <div className='py-[1%]'>
-                    <p className='text-[0.7rem]'>Dashboard/Issue Credit</p>
-                    <h3 className='text-[1.3rem] font-[500]'>Issue Credit</h3>
+        <div className='grid md:grid-cols-2 gap-6'>
+          <Card>
+            <CardHeader>
+              <CardTitle>Credit Request</CardTitle>
+              <CardDescription>
+                Enter credit details to calculate repayment terms
+              </CardDescription>
+            </CardHeader>
+            <CardContent className='space-y-6'>
+              <div className='space-y-4'>
+                <div className='space-y-2'>
+                  <Label htmlFor='amount'>Amount of Credit Request</Label>
+                  <div className='relative'>
+                    <CreditCard className='absolute left-2 top-2.5 h-4 w-4 text-muted-foreground' />
+                    <Input
+                      id='amount'
+                      type='number'
+                      className='pl-8'
+                      value={formData.amount}
+                      onChange={(e) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          amount: e.target.value,
+                        }))
+                      }
+                      placeholder='Enter credit amount'
+                    />
+                  </div>
                 </div>
 
-                <div className='flex justify-between'>
-                    <div className='py-[2%] px-[1%] w-[65%]'>
-                        <div className='w-[100%] overflow-scroll'>
-                            <TextInput
-                                label="Amount of credit request"
-                                name="amount"
-                                value={formData.amount}
-                                placeholder={`Amount of credit request`}
-                                onChange={handleChange}
-                                width={`w-[100%]`}
-                            />
-                            <SelectInput
-                                label="Payment duration in month(s)"
-                                name="duration"
-                                data={durations}
-                                value={formData.duration}
-                                width={`w-[100%]`}
-                                onChange={handleChange}
-                            />
-                            {compoundInterest && +compoundInterest > 0 &&
-                                <>
-                                    <div className='flex justify-center'>
-                                        <div className='my-[3%] mr-6 w-[50%]'>
-                                            <div className='text-[0.9rem] font-[400] pb-[2px]'>You will pay</div>
-                                            <div className='text-[0.9rem] font-[400] text-[#110077]'>{formatAmount(((+compoundInterest + +formData.amount) / formData.duration).toFixed(2))}</div>
-                                            <div className='text-[0.9rem] font-[600] text-[#C3C3C4]'>Per Month</div>
-                                        </div>
-                                        <div className='my-[3%] w-[50%]'>
-                                            <div className='text-[0.9rem] font-[400] pb-[2px]'>Due Date</div>
-                                            <div className='text-[0.9rem] font-[400] text-[#110077]'>{findDueDate()}</div>
-                                        </div>
-                                    </div>
-                                    <div className='flex justify-center'>
-                                        <div className='my-[3%] mr-6 w-[50%]'>
-                                            <div className='text-[0.9rem] font-[400] pb-[2px]'>Credit</div>
-                                            <div className='text-[0.9rem] font-[400] text-[#110077]'>{formatAmount(formData.amount)}</div>
-                                        </div>
-                                        <div className='my-[3%] mr-6 w-[50%]'>
-                                            <div className='text-[0.9rem] font-[400] pb-[2px]'>Return</div>
-                                            <div className='text-[0.9rem] font-[400] text-[#110077]'>{formatAmount((+compoundInterest + +formData.amount).toFixed(2))}</div>
-                                        </div>
-                                        <div className='my-[3%] mr-6 w-[50%]'>
-                                            <div className='text-[0.9rem] font-[400] pb-[2px]'>Interest</div>
-                                            <div className='text-[0.9rem] font-[400] text-[#110077]'>{formatAmount(compoundInterest)}</div>
-                                        </div>
-                                    </div>
-                                    <div className='my-[7%] flex justify-center'>
-                                        <button className='text-[#ffffff] w-[auto] min-w-[160px] rounded-md bg-[#533AE9] px-[10px] lg:mr-[5%] rounded-md flex justify-center items-center' onClick={() => handleConfirmCredit()}>Confirm</button>
-                                    </div>
-                                </>
-                            }
+                <div className='space-y-2'>
+                  <Label htmlFor='duration'>Payment Duration</Label>
+                  <Select
+                    value={formData.duration.toString()}
+                    onValueChange={(value) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        duration: parseInt(value),
+                      }))
+                    }
+                  >
+                    <SelectTrigger id='duration' className='w-full'>
+                      <SelectValue placeholder='Select duration' />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {durations.map((duration) => (
+                        <SelectItem key={duration} value={duration.toString()}>
+                          {duration} Month{duration !== 1 ? "s" : ""}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              {compoundInterest > 0 && showSummary && (
+                <Card className='bg-secondary'>
+                  <CardHeader>
+                    <CardTitle className='text-lg'>Payment Summary</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className='space-y-6'>
+                      <div className='grid grid-cols-2 gap-4'>
+                        <div className='space-y-2'>
+                          <div className='flex items-center gap-2'>
+                            <Calculator className='h-4 w-4' />
+                            <Label>Monthly Payment</Label>
+                          </div>
+                          <p className='text-lg font-semibold'>
+                            {formatAmount(
+                              (
+                                (+compoundInterest + +formData.amount) /
+                                formData.duration
+                              ).toFixed(2)
+                            )}
+                          </p>
                         </div>
+                        <div className='space-y-2'>
+                          <div className='flex items-center gap-2'>
+                            <Calendar className='h-4 w-4' />
+                            <Label>Due Date</Label>
+                          </div>
+                          <p className='text-lg font-semibold'>
+                            {findDueDate()}
+                          </p>
+                        </div>
+                      </div>
 
+                      <Table>
+                        <TableBody>
+                          <TableRow>
+                            <TableCell className='font-medium'>
+                              Credit Amount
+                            </TableCell>
+                            <TableCell className='text-right'>
+                              {formatAmount(formData.amount)}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow>
+                            <TableCell className='font-medium'>
+                              Interest
+                            </TableCell>
+                            <TableCell className='text-right'>
+                              {formatAmount(compoundInterest)}
+                            </TableCell>
+                          </TableRow>
+                          <TableRow className='font-semibold'>
+                            <TableCell>Total Return</TableCell>
+                            <TableCell className='text-right'>
+                              {formatAmount(
+                                (+compoundInterest + +formData.amount).toFixed(
+                                  2
+                                )
+                              )}
+                            </TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+
+                      <Button
+                        className='w-full shadow-md bg-[#533ae9] text-white'
+                        onClick={handleConfirmCredit}
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? "Processing..." : "Confirm Credit"}
+                      </Button>
                     </div>
+                  </CardContent>
+                </Card>
+              )}
+            </CardContent>
+          </Card>
 
-                    {currentEmployee &&
-                        <div className='py-[2%] px-[1%] w-[35%] '>
-                            <div className='bg-[#fff] h-[800px]'>
-                                <div className="w-[100%]  py-[3%] px-[4%] my-[2%] rounded-md">
-                                    <h3 className='text-[1.5rem] font-[500]'> Personal Information </h3>
+          {currentEmployee && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Personal Information</CardTitle>
+                <CardDescription>
+                  Employee details and credit history
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableBody>
+                    {[
+                      {
+                        label: "Full Name",
+                        value: `${currentEmployee?.firstName} ${currentEmployee.lastName}`,
+                      },
+                      { label: "Job Title", value: currentEmployee.jobTitle },
+                      { label: "Email", value: currentEmployee.email },
+                      { label: "Salary", value: `₦${currentEmployee.salary}` },
+                      {
+                        label: "Credit Date",
+                        value: currentEmployee.creditDate,
+                      },
+                      {
+                        label: "Phone Number",
+                        value: currentEmployee.phoneNumber,
+                      },
+                      {
+                        label: "Total Credit Collected",
+                        value: formatAmount(currentEmployee.collectedCredit),
+                      },
+                    ].map(({ label, value }) => (
+                      <TableRow key={label}>
+                        <TableCell className='font-medium'>{label}</TableCell>
+                        <TableCell>{value}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
 
-                                    <div className='my-[3%]'>
-                                        <div className='text-[0.9rem] font-[400] pb-[2px]'>Full Name:</div>
-                                        <div className='text-[0.9rem] font-[400] text-[#110077]'>{currentEmployee.firstName} {currentEmployee.lastName}</div>
-                                    </div>
-                                    <div className='my-[3%]'>
-                                        <div className='text-[0.9rem] font-[400] pb-[2px]'>Job Title:</div>
-                                        <div className='text-[0.9rem] font-[400] text-[#110077]'>{currentEmployee.jobTitle}</div>
-                                    </div>
-                                    <div className='my-[3%]'>
-                                        <div className='text-[0.9rem] font-[400] pb-[2px]'>Email:</div>
-                                        <div className='text-[0.9rem] font-[400] text-[#110077]'>{currentEmployee.email}</div>
-                                    </div>
-                                    <div className='my-[3%]'>
-                                        <div className='text-[0.9rem] font-[400] pb-[2px]'>Salary:</div>
-                                        <div className='text-[0.9rem] font-[400] text-[#110077]'>{"₦" + currentEmployee.salary}</div>
-                                    </div>
-                                    <div className='my-[3%]'>
-                                        <div className='text-[0.9rem] font-[400] pb-[2px]'>Credit Date:</div>
-                                        <div className='text-[0.9rem] font-[400] text-[#110077]'>{currentEmployee.creditDate}</div>
-                                    </div>
-                                    <div className='my-[3%]'>
-                                        <div className='text-[0.9rem] font-[400] pb-[2px]'>Phone Number:</div>
-                                        <div className='text-[0.9rem] font-[400] text-[#110077]'>{currentEmployee.phoneNumber}</div>
-                                    </div>
-                                    <div className='my-[3%]'>
-                                        <div className='text-[0.9rem] font-[400] pb-[2px]'>Total Amount Of Credit Collected:</div>
-                                        <div className='text-[0.9rem] font-[400] text-[#110077]'>{formatAmount(currentEmployee.collectedCredit)}</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>}
-                </div>
-            </div>
-
-
-        </div >
-    )
-}
-
-export default IssueCredit
+export default IssueCredit;
