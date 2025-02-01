@@ -1,154 +1,279 @@
-import { Link, useLocation, useNavigate } from "react-router-dom"
-import { SelectInput } from "./DashboardAddProduct"
-import { AnalyticCard } from "./DashboardHome"
-import phone from "../../assets/phone.png"
-import xmark from "../../assets/xmark.png"
-import search from '../../assets/search.png'
-import { useEffect, useState } from "react"
-import { getEmployeeTransactions, withdraw } from "../../redux/actions"
-import { useDispatch, useSelector } from "react-redux"
-import { formatAmount } from "../../utils/serviceUtils"
-import Loader from "../../components/Loader"
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { Card, CardContent } from "../../components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../../components/ui/table";
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../components/ui/select";
+import { Skeleton } from "../../components/ui/skeleton";
+import { Loader2, Search } from "lucide-react";
+import { cn } from "../../utils";
+import { getEmployeeTransactions, withdraw } from "../../redux/actions";
+import { formatAmount } from "../../utils/serviceUtils";
+
+// Define interfaces for our data structures
+interface Transaction {
+  userId: string;
+  name: string;
+  email: string;
+  type: "CREDIT_DEPOSIT" | "REPAYMENT";
+  phoneNumber: string;
+  currentCredit: number;
+  status: "Active" | "Inactive";
+  date: string;
+}
+
+interface TransactionsState {
+  allEmployeesData: Transaction[];
+  totalCredit: number;
+  totalActiveCredit: number;
+  totalDuePayment: number;
+}
 
 const Transactions = () => {
-    const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch<any>();
+  const transactions = useSelector(
+    (state: any) => state.transactions as TransactionsState
+  );
+  const [isLoading, setIsLoading] = useState(true);
 
-    const [showModal, setShowModal] = useState(false)
-    const toggleModal = () => {
-        setShowModal(!showModal)
-    }
+  // Search state with proper typing
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filteredTransactions, setFilteredTransactions] = useState<
+    Transaction[]
+  >([]);
 
-    const transactions = useSelector((state: any) => state.transactions)
+  // Initial data fetch
+  useEffect(() => {
+    setIsLoading(true);
+    dispatch(getEmployeeTransactions()).finally(() => setIsLoading(false));
+  }, [dispatch]);
 
-    const dispatch = useDispatch() as unknown as any
+  // Search filtering effect
+  useEffect(() => {
+    if (!transactions?.allEmployeesData) return;
 
-    useEffect(() => {
-        dispatch(getEmployeeTransactions())
-    }, [])
+    const filtered = transactions.allEmployeesData.filter(
+      (elem: Transaction) =>
+        elem.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        elem.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (elem.type === "CREDIT_DEPOSIT" ? "DISBURSEMENT" : "REPAYMENT")
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase()) ||
+        elem.phoneNumber.includes(searchTerm)
+    );
+    setFilteredTransactions([...filtered].reverse());
+  }, [searchTerm, transactions]);
 
-    return (
-            <div className={`${window.innerWidth > 768 ? `ml-[15%]` : `ml-[10%]`} bg-[#1100770A]min-h-[100vh] `}>
-                <div className='mx-[3%]'>
-                    <div className="">
-                        <div className='py-[1%]'>
-                            <p className='text-[0.7rem]'>Dashboard/Transactions</p>
-                            <h3 className='text-[1.3rem] font-[500]'>Transactions</h3>
-                        </div>
-                        <div className='flex items-center justify-start my-[2%]'>
-                            <div className="px-[8%] py-[4%] bg-[#110077] text-[#fff] border rounded-xl mr-[2%]">
-                                <div className="font-[400] text-[1.2rem]">Total Credit</div>
-                                <div className="font-[700] text-[1.2rem] pt-[1%]">{formatAmount(transactions.totalCredit)}</div>
-                            </div>
-                            <div className="px-[8%] py-[4%] bg-[#32C38F] text-[#fff] border rounded-xl mr-[2%]">
-                                <div className="font-[400] text-[1.2rem]">Active Credit</div>
-                                <div className="font-[700] text-[1.2rem] pt-[1%]">{formatAmount(transactions.totalActiveCredit)}</div>
-                            </div>
-                            <div className="px-[8%] py-[4%] bg-[#D72D2DB2] text-[#fff] border rounded-xl">
-                                <div className="font-[400] text-[1.2rem]">Due Payment</div>
-                                <div className="font-[700] text-[1.2rem] pt-[1%]">{formatAmount(transactions.totalDuePayment)}</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className='flex items-center justify-between'>
-                        <div className='lg:w-[25%] w-[50%] bg-[#FFFFFF] flex items-center justify-center h-[5vh] border border-[#C3C3C4] rounded-lg'>
-                            <img src={search} alt="" className='h-[2vh] mr-[5%] pl-[5%] lg:pr-[0%]' />
-                            <input type="text" placeholder='Search' className='border-none h-[5vh] text-[#707070] outline-none bg-[transparent]' />
-                        </div>
-                        <select
-                            placeholder="Search"
-                            className="border-none h-[5vh] pl-[5%] pr-[5%] bg-[#F5F5FA] text-[#707070] outline-none text-[0.8rem]"
-                        >
-                            <option>Today ({new Date().toLocaleDateString()})</option>
-                        </select>
-                    </div>
-                    <div className="w-[100%] overflow-scroll">
-                        <table className=' lg:w-[100%] border rounded-md my-[2%] w-[250%]'>
-                            <thead  >
-                                <tr className='bg-[#1100770A] text-[0.8rem]  text-[#171515] font-[700] w-[100%] px-[5%] '>
-                                    <th className='font-[500]'></th>
-                                    <th className='font-[500] py-[1%]'>Name</th>
-                                    <th className='font-[500]'>Email</th>
-                                    <th className='font-[500]'>Job Title</th>
-                                    <th className='font-[500]'>Phone No</th>
-                                    <th className='font-[500]'>Transaction Value</th>
-                                    {/* <th className='font-[500]'>Monthly Payment</th> */}
-                                    <th className='font-[500]'>Status</th>
-                                    <th className='font-[500]'>Action</th>
-                                </tr>
-                            </thead>
-                            <tbody className="h-[300px] overflow-scroll">
-                                {transactions?.allEmployeesData?.map((elem: any, id: number) => (
-                                    <tr key={id} className='bg-[#FFFFFF] text-[0.8rem] text-[#171515] text-center w-[100%] h-[10vh] '>
-                                        <td className='font-[400] flex justify-center items-center h-[10vh]'><img src={elem.coverImage} alt="" className='h-[50px]' /></td>
-                                        <td className='font-[400]'>{elem.name}</td>
-                                        <td className='font-[400]'>{elem.email}</td>
-                                        <td className='font-[400]'>{elem.workData?.[0]?.jobTitle}</td>
-                                        <td className='font-[400]'>{elem.phoneNumber}</td>
-                                        <td className='font-[400]'>{formatAmount(elem.currentCredit)}</td>
-                                        {/* <td className='font-[400]'>{formatAmount(elem.totalCredit)}</td> */}
-                                        <td className={`${elem.status === 'Active' ? 'text-[#32C38F]' : 'text-[#D72D2D]'} font-[400]`}>{elem.status}</td>
-                                        <td className='font-[400] text-[#110077] cursor-pointer' onClick={() => navigate(`/dashboard/transaction/${elem.userId}`)}> View </td>
-                                    </tr>))}
-                            </tbody>
-                        </table>
+  // // Process transactions with proper sorting
+  // const getDisplayTransactions = (): Transaction[] => {
+  //   if (!transactions?.allEmployeesData) return [];
+  //   const baseData = searchTerm
+  //     ? filteredTransactions
+  //     : [...transactions.allEmployeesData];
+  //   return baseData.sort(
+  //     (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  //   );
+  // };
 
-                    </div>
+  // const displayTransactions = getDisplayTransactions();
 
-                </div>
+  const LoadingTableRow = () => (
+    <TableRow>
+      <TableCell>
+        <Skeleton className='bg-gray-100 animate-pulse h-4 w-32' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='bg-gray-100 animate-pulse h-4 w-40' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='bg-gray-100 animate-pulse h-4 w-32' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='bg-gray-100 animate-pulse h-4 w-28' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='bg-gray-100 animate-pulse h-4 w-24' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='bg-gray-100 animate-pulse h-6 w-16 rounded-full' />
+      </TableCell>
+      <TableCell>
+        <Skeleton className='bg-gray-100 animate-pulse h-4 w-12' />
+      </TableCell>
+    </TableRow>
+  );
 
-                {showModal ? <WithdrawModal func={toggleModal} /> : null}
-            </div>
-    )
-}
+  const cardData = [
+    {
+      title: "Total Credit",
+      value: `${formatAmount(transactions.totalCredit)}`,
+      bgColor: "bg-[#110077]",
+    },
+    {
+      title: "Active Credit",
+      value: transactions.totalActiveCredit,
+      bgColor: "bg-[#32C38F]",
+    },
+    {
+      title: "Due Payment",
+      value: `${formatAmount(transactions.totalDuePayment)}`,
+      bgColor: "bg-[#D72D2DB2]",
+    },
+  ];
 
-export default Transactions
-
-export const WithdrawModal = ({ func }: any) => {
-    const [formData, setFormData] = useState<any>({
-        _ID: localStorage.getItem("userId"),
-        amount: "",
-    })
-
-    const handleChange = (e: any) => {
-        const { name, value } = e.target
-
-        setFormData({
-            ...formData, [name]: value
-        })
-    }
-
-    const dispatch = useDispatch() as unknown as any
-
-    const handleSubmit = (e: any) => {
-        e.preventDefault()
-        dispatch(withdraw(formData))
-    }
-
-    console.log(formData)
-    return (
-        <div className=" fixed h-[100vh] w-[100%] bg-[#17151599] top-[0] left-[0] flex items-center justify-center">
-            <div className="bg-[#fff] lg:w-[40%] w-[80%] rounded-md ">
-                <div className="bg-[#1100770A] px-[3%] py-[2%] flex justify-between items-center">
-                    <h3>Withdrawal Request</h3>
-                    <img src={xmark} alt="" className="cursor-pointer h-[2vh]" onClick={func} />
-                </div>
-                <div className="flex items-center justify-between my-[3%] px-[3%]">
-                    <label className="text-[0.9rem]">Amount Requested</label>
-                    <input type="number" placeholder="450000" name="amount" className="border w-[50%] px-[3%] rounded-md py-[1%]" onChange={handleChange} />
-                </div>
-                <div className="flex items-center justify-between my-[3%] px-[3%]">
-                    <label className="text-[0.9rem]">Withdraw To</label>
-                    <SelectInput value={`Select bank account`} width={`w-[50%]`} />
-                </div>
-
-                <div className='flex justify-end my-[8%] '>
-                    <Link to="" className='bg-[#FAFAFA] w-[20%] h-[5vh] text-[#533AE9] font-[600] mr-[5%] rounded-md flex justify-center items-center'>Cancel</Link>
-                    <Link to="" className='bg-[#533AE9] w-[20%] h-[5vh] text-[#fff] mr-[5%] font-[600] rounded-md flex justify-center items-center' onClick={handleSubmit}>Confirm</Link>
-                </div>
-
-            </div>
-
-
+  return (
+    <div className={cn("mx-auto px-4 py-6", "ml-[calc(4rem+1px)]")}>
+      <div className='space-y-6'>
+        <div>
+          <p className='text-sm text-muted-foreground'>
+            Dashboard/Transactions
+          </p>
+          <h1 className='text-2xl font-semibold'>Transactions</h1>
         </div>
-    )
-}
+
+        <div className='grid md:grid-cols-3 gap-4'>
+          {cardData.map(({ title, value, bgColor }) => (
+            <Card key={title} className={`${bgColor} text-white`}>
+              <CardContent className='pt-6'>
+                <div className='text-lg font-medium'>{title}</div>
+                <div className='text-2xl font-bold pt-2'>
+                  {isLoading ? (
+                    <div className='flex items-center space-x-2'>
+                      <Loader2 className='h-6 w-6 animate-spin' />
+                      <span>Loading...</span>
+                    </div>
+                  ) : (
+                    value
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        <div className='flex items-center justify-between space-x-4'>
+          <div className='relative flex-grow'>
+            <Search
+              className='absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground'
+              size={20}
+            />
+            <Input
+              placeholder='Search by name, email, transaction type, or phone'
+              className='pl-10'
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <Select>
+            <SelectTrigger className='w-[180px]'>
+              <SelectValue
+                placeholder={`Today (${new Date().toLocaleDateString()})`}
+              />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value='today'>
+                Today ({new Date().toLocaleDateString()})
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+
+        <Card>
+          <CardContent className='p-0'>
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  {[
+                    "Name",
+                    "Email",
+                    "Transaction Type",
+                    "Phone No",
+                    "Transaction Value",
+                    "Status",
+                    "Action",
+                  ].map((header) => (
+                    <TableHead key={header} className='text-center'>
+                      {header}
+                    </TableHead>
+                  ))}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {isLoading
+                  ? Array(5)
+                      .fill(0)
+                      .map((_, index) => <LoadingTableRow key={index} />)
+                  : filteredTransactions.map(
+                      (elem: Transaction, index: number) => (
+                        <TableRow key={index}>
+                          <TableCell>{elem.name}</TableCell>
+                          <TableCell>{elem.email}</TableCell>
+                          <TableCell className='lowercase '>
+                            <span
+                              className={`rounded-full text-white text-[12px] px-2 py-1 ${
+                                elem.type === "CREDIT_DEPOSIT"
+                                  ? "bg-green-600"
+                                  : "bg-[#533ae9]"
+                              }`}
+                            >
+                              {elem.type === "CREDIT_DEPOSIT"
+                                ? "DISBURSEMENT"
+                                : "REPAYMENT"}
+                            </span>
+                          </TableCell>
+                          <TableCell>{elem.phoneNumber}</TableCell>
+                          <TableCell className='lg:pl-10'>
+                            {formatAmount(elem.currentCredit)}
+                          </TableCell>
+                          <TableCell>
+                            <span
+                              className={`rounded-full text-white text-[12px] px-2 py-1 ${
+                                elem.status === "Active"
+                                  ? "bg-green-600"
+                                  : "bg-red-500"
+                              }`}
+                            >
+                              {elem.status}
+                            </span>
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              variant='link'
+                              onClick={() =>
+                                navigate(
+                                  `/dashboard/transaction/${elem.userId}`
+                                )
+                              }
+                            >
+                              View
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      )
+                    )}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};
+
+export default Transactions;

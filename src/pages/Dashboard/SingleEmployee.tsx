@@ -1,109 +1,102 @@
-import shoes from "../../assets/shoe1.jpeg";
-import drag1 from "../../assets/dragndrop1.png";
-import drag2 from "../../assets/dragndrop2.png";
-import mac from "../../assets/mac1.jpeg";
-import { categories } from "../../data/categories";
-import { Link, useLocation, useParams } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import { getSingleEmployee } from "../../redux/actions";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { SelectInput, TextAreaInput, TextInput } from "./DashboardAddProduct";
+import { useNavigate, useParams } from "react-router-dom";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/card";
+import { getSingleEmployee } from "../../redux/actions";
+import { Input } from "../../components/ui/input";
+import { Label } from "../../components/ui/label";
+import { Skeleton } from "../../components/ui/skeleton";
+import { cn } from "../../utils";
+import { MoveLeft } from "lucide-react";
 
 const SingleEmployee = () => {
-  const dispatch = useDispatch() as unknown as any
-
-  const singleEmployee = useSelector((state: any) => state.singleEmployee)  
-
-  const { employeeId } = useParams()
+  const dispatch = useDispatch<any>();
+  const navigate = useNavigate();
+  const { employeeId } = useParams();
+  const singleEmployee = useSelector((state: any) => state.singleEmployee);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   useEffect(() => {
     if (employeeId) {
-      dispatch(getSingleEmployee(employeeId))
+      setIsLoading(true);
+      dispatch(getSingleEmployee(employeeId)).finally(() =>
+        setIsLoading(false)
+      );
     }
-  }, [])
+  }, [employeeId, dispatch]);
+
+  const employeeFields = [
+    { label: "First Name", value: singleEmployee?.firstName },
+    { label: "Last Name", value: singleEmployee?.lastName },
+    { label: "Job Title", value: singleEmployee?.jobTitle },
+    { label: "Phone Number", value: singleEmployee?.phoneNumber },
+    { label: "Company", value: singleEmployee?.company },
+    { label: "Received Credit", value: singleEmployee?.collectedCredit },
+    { label: "Credit Date", value: singleEmployee?.creditDate },
+  ];
+
+  const LoadingHeader = () => (
+    <div>
+      <p className='text-sm text-muted-foreground'>Dashboard/Employee</p>
+      <Skeleton className='bg-gray-100 animate-pulse h-8 w-48 mt-1' />
+    </div>
+  );
+
+  const LoadingField = () => (
+    <div>
+      <Skeleton className='bg-gray-100 animate-pulse h-4 w-24 mb-2' />
+      <Skeleton className='bg-gray-100 animate-pulse h-10 w-full' />
+    </div>
+  );
 
   return (
-    <div
-      className={`${window.innerWidth > 768 ? `ml-[15%]` : `ml-[10%]`
-        } bg-[#1100770A]min-h-[100vh] `}
-    >
-      <div className="mx-[3%]">
-        <div className="py-[1%]">
-          <p className="text-[0.7rem]">Dashboard/Employee</p>
-          <h3 className="text-[1.3rem] font-[500]">
-            {singleEmployee?.firstName + ' ' + singleEmployee?.lastName}
-          </h3>
-        </div>
-
-        <form
-          className="flex lg:flex-row flex-col justify-between"
-
-        >
-          <div className="bg-[#fff] lg:w-[600px] px-[3%] py-[2%] rounded-md ">
-            <TextInput
-              label="Employee First Name"
-              placeholder="Employee First Name"
-              type="text"
-              name="firstName"
-              value={singleEmployee?.firstName}
-              readonly={true}
-            />
-            <TextInput
-              label="Employee Last Name"
-              placeholder="Employee Last Name"
-              type="text"
-              name="lastName"
-              value={singleEmployee?.lastName}
-              readonly={true}
-            />
-
-            <TextInput
-              label="Job Title"
-              name="jobTitle"
-              width={`w-[100%]`}
-              value={singleEmployee?.jobTitle}
-              readonly={true}
-            />
-
-            <TextInput
-              label="Phone Number"
-              name="phoneNumber"
-              value={singleEmployee?.phoneNumber}
-              readonly={true}
-            />
-            <TextInput
-              label="Company"
-              name="company"
-              value={singleEmployee?.company}
-              readonly={true}
-            />
-            <TextInput
-              label="Collected Credit"
-              name="collectedCredit"
-              value={singleEmployee?.collectedCredit}
-              readonly={true}
-            />
-            <TextInput
-              label="Credit Date"
-              name="creditDate"
-              value={singleEmployee?.creditDate}
-              readonly={true}
-            />
+    <div className={cn("mx-auto px-4 py-6", "ml-[calc(4rem+1px)]")}>
+      <div className='space-y-4'>
+        <MoveLeft
+          size={32}
+          onClick={() => navigate(-1)}
+          className='cursor-pointer'
+        />
+        {isLoading ? (
+          <LoadingHeader />
+        ) : (
+          <div>
+            <p className='text-sm text-muted-foreground'>Dashboard/Employee</p>
+            <h1 className='text-2xl font-semibold'>
+              {singleEmployee?.firstName} {singleEmployee?.lastName}
+            </h1>
           </div>
-          {/* <div className="bg-[#fff] lg:w-[50%] px-[3%] py-[2%] rounded-md ">
-            <div>
-              <h3 className="text-[#110077]">Employee Images</h3>
-              <div className="flex justify-between">
-                <img
-                  src={singleEmployee?.image}
-                  alt=""
-                  className="w-[auto] border border-dashed border-[#8C858D] rounded-md w-[55%]"
-                />
+        )}
 
-              </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Employee Details</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className='grid md:grid-cols-2 gap-6'>
+              {isLoading
+                ? Array(7)
+                    .fill(0)
+                    .map((_, index) => <LoadingField key={index} />)
+                : employeeFields.map(({ label, value }) => (
+                    <div key={label}>
+                      <Label>{label}</Label>
+                      <Input
+                        type='text'
+                        value={value || ""}
+                        readOnly
+                        className='mt-2'
+                      />
+                    </div>
+                  ))}
             </div>
-          </div> */}
-        </form>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
