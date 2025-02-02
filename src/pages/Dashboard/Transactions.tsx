@@ -24,25 +24,10 @@ import { Loader2, Search } from "lucide-react";
 import { cn } from "../../utils";
 import { getEmployeeTransactions, withdraw } from "../../redux/actions";
 import { formatAmount } from "../../utils/serviceUtils";
+import { TransactionsState } from "../../../types/transaction";
+import { Transaction } from "../../../types/transaction";
 
 // Define interfaces for our data structures
-interface Transaction {
-  userId: string;
-  name: string;
-  email: string;
-  type: "CREDIT_DEPOSIT" | "REPAYMENT";
-  phoneNumber: string;
-  currentCredit: number;
-  status: "Active" | "Inactive";
-  date: string;
-}
-
-interface TransactionsState {
-  allEmployeesData: Transaction[];
-  totalCredit: number;
-  totalActiveCredit: number;
-  totalDuePayment: number;
-}
 
 const Transactions = () => {
   const navigate = useNavigate();
