@@ -38,6 +38,7 @@ import {
 } from "../../components/ui/avatar";
 import DashboardHomeLoader from "../../components/SkeletalLoading";
 import { Link } from "react-router-dom";
+import { TransactionsState } from "../../../types/transaction";
 
 const AnalyticCard = ({
   icon: Icon,
@@ -69,7 +70,9 @@ const AnalyticCard = ({
 const DashboardHome = () => {
   const dispatch = useDispatch<any>();
   const company = useSelector((state: any) => state.company);
-  const transactions = useSelector((state: any) => state.transactions);
+  const transactions = useSelector(
+    (state: any) => state.transactions as TransactionsState
+  );
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -139,7 +142,7 @@ const DashboardHome = () => {
           <AnalyticCard
             icon={TrendingUp}
             title='Due Payment'
-            value={formatAmount(company?.totalDuePaymentAmount)}
+            value={formatAmount(transactions?.totalDuePayment)}
           />
         </div>
 
